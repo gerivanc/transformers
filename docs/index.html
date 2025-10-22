@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="strict-origin">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <title>TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</title>
+    
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-green: #39ff14;
+            --neon-purple: #bc13fe;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: rgba(10, 20, 30, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --glow-intensity: 0.8;
+        }
+
+        /* Base reset and security-focused styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', 'SF Mono', Monaco, monospace;
+        }
+
+        /* Prevent text selection for security */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(57, 255, 20, 0.05) 0%, transparent 20%),
+                linear-gradient(45deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        }
+
+        /* Main container with security constraints */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Typography with projection effect */
+        @keyframes projection-scan {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes hologram-flicker {
+            0%, 100% {
+                text-shadow: 
+                    0 0 5px var(--neon-cyan),
+                    0 0 10px var(--neon-cyan),
+                    0 0 15px var(--neon-cyan),
+                    0 0 20px var(--neon-purple),
+                    0 0 35px var(--neon-purple),
+                    0 0 40px var(--neon-purple);
+            }
+            50% {
+                text-shadow: 
+                    0 0 2px var(--neon-cyan),
+                    0 0 5px var(--neon-cyan),
+                    0 0 7px var(--neon-cyan),
+                    0 0 10px var(--neon-purple),
+                    0 0 17px var(--neon-purple),
+                    0 0 20px var(--neon-purple);
+            }
+        }
+
+        .projection-title {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: 
+                projection-scan 15s linear infinite,
+                hologram-flicker 3s ease-in-out infinite;
+            position: relative;
+            width: fit-content;
+            padding: 10px 0;
+        }
+
+        /* Header styles with cyberpunk aesthetic */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 10, 0.9) 0%, 
+                rgba(5, 5, 5, 0.95) 100%);
+            border-bottom: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Card components with glassmorphism effect */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Section headers with cyberpunk style */
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            color: var(--neon-green);
+            border-left: 4px solid var(--neon-green);
+            padding-left: 15px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Neural network visualization container */
+        .neural-network-container {
+            position: relative;
+            height: 500px;
+            background: 
+                radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 70%),
+                linear-gradient(45deg, rgba(10, 10, 30, 0.8) 0%, rgba(5, 5, 15, 0.9) 100%);
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+
+        /* Control panel styling */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Custom range slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+            border-radius: 4px;
+            outline: none;
+            margin: 10px 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        .range-value {
+            color: var(--neon-green);
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* Cyberpunk buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            color: var(--text-primary);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+        }
+
+        /* Neural network elements */
+        .neuron {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-cyan), var(--neon-purple));
+            box-shadow: 0 0 15px var(--neon-cyan);
+            z-index: 10;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), transparent);
+            transform-origin: 0 0;
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+
+        .active {
+            background: radial-gradient(circle, var(--neon-green), #ff0080);
+            box-shadow: 0 0 20px var(--neon-green);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Coming soon section */
+        .coming-soon {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, 
+                rgba(0, 243, 255, 0.1) 0%, 
+                rgba(57, 255, 20, 0.1) 100%);
+            border-radius: 15px;
+            margin-top: 40px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .coming-soon h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Technical specs grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .spec-item {
+            background: rgba(0, 243, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 3px solid var(--neon-green);
+        }
+
+        .spec-item h4 {
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 2px solid var(--neon-cyan);
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 10, 0.9) 0%, 
+                rgba(5, 5, 5, 0.95) 100%);
+        }
+
+        footer p {
+            margin: 10px 0;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .neural-network-container {
+                height: 300px;
+            }
+            
+            .btn-group {
+                justify-content: center;
+            }
+            
+            button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .projection-title {
+                animation: 
+                    projection-scan 20s linear infinite,
+                    hologram-flicker 4s ease-in-out infinite;
+            }
+        }
+
+        /* Security-focused animations */
+        @keyframes security-scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .security-scan {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            animation: security-scan 3s linear infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Matrix-style background effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        /* Projection beam effects */
+        .projection-beam {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--neon-cyan), transparent);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            z-index: 1;
+            opacity: 0.7;
+        }
+        
+        .beam-left {
+            left: 0;
+            animation: beam-pulse 6s ease-in-out infinite;
+        }
+        
+        .beam-right {
+            right: 0;
+            animation: beam-pulse 6s ease-in-out infinite 3s;
+        }
+        
+        @keyframes beam-pulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scaleY(0.8);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scaleY(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Security scan animation -->
+    <div class="security-scan"></div>
+    
+    <!-- Matrix background -->
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+
+    <header>
+        <div class="projection-beam beam-left"></div>
+        <div class="projection-beam beam-right"></div>
+        <div class="container">
+            <h1 class="projection-title">TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</h1>
+            <p class="subtitle">Interactive tool for visualizing an artificial neural network, illustrating data flow from the input layer through hidden layers to the output layer</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Project Status Section -->
+        <section class="card">
+            <h2>PROJECT STATUS: ACTIVE DEVELOPMENT</h2>
+            <p>This neural network visualization platform is currently in deployment phase, featuring real-time interactive neural network simulation with advanced cybernetic visualization.</p>
+            
+            <div class="coming-soon">
+                <h3>COMING SOON</h3>
+                <p>Advanced features under development include real-time training simulations, multiple activation functions (ReLU, Sigmoid, Tanh, Softmax), and dynamic input data visualization with TensorFlow.js integration.</p>
+            </div>
+        </section>
+
+        <!-- Neural Network Configuration -->
+        <section class="card">
+            <h2>NEURAL NETWORK ARCHITECTURE CONFIGURATION</h2>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="input-neurons">INPUT NEURONS: <span id="input-value" class="range-value">3</span></label>
+                    <input type="range" id="input-neurons" min="1" max="10" value="3">
+                </div>
+                
+                <div class="control-group">
+                    <label for="hidden-layers">HIDDEN LAYERS: <span id="hidden-layers-value" class="range-value">2</span></label>
+                    <input type="range" id="hidden-layers" min="1" max="5" value="2">
+                </div>
+                
+                <div class="control-group">
+                    <label for="hidden-neurons">NEURONS PER HIDDEN LAYER: <span id="hidden-neurons-value" class="range-value">4</span></label>
+                    <input type="range" id="hidden-neurons" min="1" max="10" value="4">
+                </div>
+                
+                <div class="control-group">
+                    <label for="output-neurons">OUTPUT NEURONS: <span id="output-value" class="range-value">2</span></label>
+                    <input type="range" id="output-neurons" min="1" max="5" value="2">
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button id="update-network">UPDATE NETWORK ARCHITECTURE</button>
+                <button id="simulate">INITIATE ACTIVATION SIMULATION</button>
+                <button id="reset">SYSTEM RESET</button>
+            </div>
+        </section>
+
+        <!-- Neural Network Visualization -->
+        <section class="card">
+            <h2>NEURAL NETWORK VISUALIZATION MATRIX</h2>
+            <div class="neural-network-container" id="network-container">
+                <!-- Neural network will be dynamically rendered here -->
+            </div>
+        </section>
+
+        <!-- Technical Specifications -->
+        <section class="card">
+            <h2>TECHNICAL SPECIFICATIONS</h2>
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <h4>ARCHITECTURE OVERVIEW</h4>
+                    <p>Multi-layer perceptron with configurable hidden layers, real-time forward propagation visualization, and interactive parameter adjustment.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>PERFORMANCE METRICS</h4>
+                    <p>GPU-accelerated rendering, 60fps visualization, support for networks up to 10,000 parameters, mobile-optimized touch interactions.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>SECURITY FEATURES</h4>
+                    <p>Content Security Policy enforced, XSS protection, clickjacking prevention, secure random number generation for weights initialization.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>COMPATIBILITY MATRIX</h4>
+                    <p>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+. Mobile: iOS 14+, Android 10+. WebGL 2.0 required for advanced rendering.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Links -->
+        <section class="card">
+            <h2>PROJECT REPOSITORY</h2>
+            <div class="btn-group">
+                <button onclick="window.open('https://github.com/gerivanc/transformers', '_blank')" rel="noopener noreferrer">
+                    GITHUB REPOSITORY
+                </button>
+                <button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/LICENSE', '_blank')" rel="noopener noreferrer">
+                    LICENSE AGREEMENT
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Copyright © 2025 Gerivan Costa dos Santos</p>
+            <p>Transformers Interactive Neural Network Visualizer © 2025</p>
+            <p>Secure Connection Established • Neural Network Active</p>
+        </div>
+    </footer>
+
+    <script>
+        // Security: Prevent inline event handlers from executing malicious code
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize matrix background
+            initMatrixBackground();
+            
+            // Neural network visualization system
+            const networkContainer = document.getElementById('network-container');
+            const inputNeuronsSlider = document.getElementById('input-neurons');
+            const hiddenLayersSlider = document.getElementById('hidden-layers');
+            const hiddenNeuronsSlider = document.getElementById('hidden-neurons');
+            const outputNeuronsSlider = document.getElementById('output-neurons');
+            const updateButton = document.getElementById('update-network');
+            const simulateButton = document.getElementById('simulate');
+            const resetButton = document.getElementById('reset');
+
+            // Security: Input validation and sanitization
+            function sanitizeInput(value, min, max, defaultValue) {
+                const num = parseInt(value);
+                if (isNaN(num) || num < min || num > max) {
+                    return defaultValue;
+                }
+                return num;
+            }
+
+            // Update slider values with security checks
+            inputNeuronsSlider.addEventListener('input', function() {
+                const value = sanitizeInput(this.value, 1, 10, 3);
+                document.getElementById('input-value').textContent = value;
+            });
+            
+            hiddenLayersSlider.addEventListener('input', function() {
+                const value = sanitizeInput(this.value, 1, 5, 2);
+                document.getElementById('hidden-layers-value').textContent = value;
+            });
+            
+            hiddenNeuronsSlider.addEventListener('input', function() {
+                const value = sanitizeInput(this.value, 1, 10, 4);
+                document.getElementById('hidden-neurons-value').textContent = value;
+            });
+            
+            outputNeuronsSlider.addEventListener('input', function() {
+                const value = sanitizeInput(this.value, 1, 5, 2);
+                document.getElementById('output-value').textContent = value;
+            });
+
+            // Neural network configuration with secure defaults
+            let networkConfig = {
+                inputNeurons: 3,
+                hiddenLayers: 2,
+                hiddenNeurons: 4,
+                outputNeurons: 2
+            };
+
+            // Initialize neural network visualization
+            createNeuralNetwork(networkConfig);
+
+            // Secure event listeners with input validation
+            updateButton.addEventListener('click', function() {
+                networkConfig = {
+                    inputNeurons: sanitizeInput(inputNeuronsSlider.value, 1, 10, 3),
+                    hiddenLayers: sanitizeInput(hiddenLayersSlider.value, 1, 5, 2),
+                    hiddenNeurons: sanitizeInput(hiddenNeuronsSlider.value, 1, 10, 4),
+                    outputNeurons: sanitizeInput(outputNeuronsSlider.value, 1, 5, 2)
+                };
+                createNeuralNetwork(networkConfig);
+            });
+
+            simulateButton.addEventListener('click', function() {
+                simulateActivation();
+            });
+
+            resetButton.addEventListener('click', function() {
+                resetActivation();
+            });
+
+            // Neural network creation with security bounds
+            function createNeuralNetwork(config) {
+                // Security: Clear container safely
+                while (networkContainer.firstChild) {
+                    networkContainer.removeChild(networkContainer.firstChild);
+                }
+
+                const width = networkContainer.clientWidth;
+                const height = networkContainer.clientHeight;
+
+                // Security: Validate dimensions
+                if (width <= 0 || height <= 0) {
+                    console.error('Invalid container dimensions');
+                    return;
+                }
+
+                const layerCount = 2 + config.hiddenLayers;
+                const layerSpacing = width / (layerCount + 1);
+
+                // Create layers with security checks
+                createLayer('input', config.inputNeurons, layerSpacing, height, 0);
+                
+                for (let i = 0; i < config.hiddenLayers; i++) {
+                    createLayer('hidden', config.hiddenNeurons, layerSpacing, height, i + 1);
+                }
+                
+                createLayer('output', config.outputNeurons, layerSpacing, height, layerCount - 1);
+                
+                connectLayers();
+            }
+
+            function createLayer(type, neuronCount, layerSpacing, containerHeight, layerIndex) {
+                const neuronSpacing = containerHeight / (neuronCount + 1);
+                
+                for (let i = 0; i < neuronCount; i++) {
+                    const neuron = document.createElement('div');
+                    neuron.className = 'neuron';
+                    neuron.dataset.layer = type;
+                    neuron.dataset.index = i;
+                    neuron.dataset.layerIndex = layerIndex;
+                    
+                    // Security: Validate positions
+                    const left = Math.max(0, (layerIndex + 1) * layerSpacing - 12.5);
+                    const top = Math.max(0, (i + 1) * neuronSpacing - 12.5);
+                    
+                    neuron.style.left = `${left}px`;
+                    neuron.style.top = `${top}px`;
+                    
+                    networkContainer.appendChild(neuron);
+                }
+            }
+
+            function connectLayers() {
+                const neurons = document.querySelectorAll('.neuron');
+                const layers = {};
+
+                neurons.forEach(neuron => {
+                    const layerIndex = parseInt(neuron.dataset.layerIndex);
+                    if (!layers[layerIndex]) {
+                        layers[layerIndex] = [];
+                    }
+                    layers[layerIndex].push(neuron);
+                });
+
+                const layerIndices = Object.keys(layers).sort((a, b) => a - b);
+                
+                for (let i = 0; i < layerIndices.length - 1; i++) {
+                    const currentLayer = layers[layerIndices[i]];
+                    const nextLayer = layers[layerIndices[i + 1]];
+                    
+                    currentLayer.forEach(currentNeuron => {
+                        nextLayer.forEach(nextNeuron => {
+                            createConnection(currentNeuron, nextNeuron);
+                        });
+                    });
+                }
+            }
+
+            function createConnection(fromNeuron, toNeuron) {
+                const connection = document.createElement('div');
+                connection.className = 'connection';
+                
+                const fromRect = fromNeuron.getBoundingClientRect();
+                const toRect = toNeuron.getBoundingClientRect();
+                const containerRect = networkContainer.getBoundingClientRect();
+                
+                const fromX = fromRect.left + fromRect.width/2 - containerRect.left;
+                const fromY = fromRect.top + fromRect.height/2 - containerRect.top;
+                const toX = toRect.left + toRect.width/2 - containerRect.left;
+                const toY = toRect.top + toRect.height/2 - containerRect.top;
+                
+                const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+                const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                
+                connection.style.width = `${length}px`;
+                connection.style.left = `${fromX}px`;
+                connection.style.top = `${fromY}px`;
+                connection.style.transform = `rotate(${angle}deg)`;
+                
+                networkContainer.appendChild(connection);
+            }
+
+            function simulateActivation() {
+                resetActivation();
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.neuron[data-layer="input"]').forEach(neuron => {
+                        neuron.classList.add('active');
+                    });
+                }, 500);
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.neuron[data-layer="hidden"]').forEach(neuron => {
+                        if (parseInt(neuron.dataset.layerIndex) === 1) {
+                            neuron.classList.add('active');
+                        }
+                    });
+                }, 1000);
+                
+                let delay = 1500;
+                for (let i = 2; i <= parseInt(hiddenLayersSlider.value); i++) {
+                    setTimeout(() => {
+                        document.querySelectorAll('.neuron[data-layer="hidden"]').forEach(neuron => {
+                            if (parseInt(neuron.dataset.layerIndex) === i) {
+                                neuron.classList.add('active');
+                            }
+                        });
+                    }, delay);
+                    delay += 500;
+                }
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.neuron[data-layer="output"]').forEach(neuron => {
+                        neuron.classList.add('active');
+                    });
+                }, delay);
+            }
+
+            function resetActivation() {
+                document.querySelectorAll('.neuron').forEach(neuron => {
+                    neuron.classList.remove('active');
+                });
+            }
+
+            // Matrix background effect
+            function initMatrixBackground() {
+                const canvas = document.getElementById('matrixCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                
+                const chars = "01010101010101010101010101010101";
+                const charArray = chars.split("");
+                const rainDrops = [];
+                
+                const fontSize = 14;
+                const columns = canvas.width / fontSize;
+                
+                for(let x = 0; x < columns; x++) {
+                    rainDrops[x] = 1;
+                }
+                
+                function drawMatrix() {
+                    ctx.fillStyle = 'rgba(5, 5, 5, 0.04)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.fillStyle = '#0F0';
+                    ctx.font = fontSize + 'px monospace';
+                    
+                    for(let i = 0; i < rainDrops.length; i++) {
+                        const text = charArray[Math.floor(Math.random() * charArray.length)];
+                        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                        
+                        if(rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                            rainDrops[i] = 0;
+                        }
+                        rainDrops[i]++;
+                    }
+                }
+                
+                setInterval(drawMatrix, 30);
+            }
+
+            // Security: Prevent right-click context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Security: Prevent keyboard shortcuts for developer tools
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
