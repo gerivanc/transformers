@@ -8,7 +8,7 @@ This project is currently in the deployment phase. We're building an interactive
 
 **Coming Soon:** More features are under development, including real-time training, different activation functions, and input data visualization.
 
-Follow the project page at: [https://transformers.gerivan.me](https://transformers.gerivan.me)
+Follow the project page at: [Transformers](https://transformers.gerivan.me)
 
 ## 🌟 Overview
 
@@ -130,7 +130,7 @@ This project is licensed under the terms included in the [LICENSE](https://githu
 ## 📞 Support
 
 For questions or support regarding the Transformers Interactive Neural Network Visualizer:
-- Visit the project page: [https://transformers.gerivan.me](https://transformers.gerivan.me)
+- Visit the project page: [Transformers](https://transformers.gerivan.me)
 - Check the GitHub repository for updates and documentation
 
 ---
