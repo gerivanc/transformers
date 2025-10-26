@@ -1,0 +1,33 @@
+{
+  "name": "Transformers Interactive Neural Network Visualizer",
+  "short_name": "Transformers",
+  "description": "Interactive tool for visualizing an artificial neural network, illustrating data flow from the input layer through hidden layers to the output layer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/web-app-manifest-625x618.png",
+      "sizes": "625x618",
+      "type": "image/png"
+    },
+    {
+      "src": "/web-app-manifest-784x910.png",
+      "sizes": "784x910",
+      "type": "image/png"
+    },
+    {
+      "src": "/transformers1-784x910.png",
+      "sizes": "784x910",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "transformers2-784x789.png",
+      "sizes": "960x958",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
