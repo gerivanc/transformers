@@ -8,13 +8,13 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/web-app-manifest-625x618.png",
-      "sizes": "625x618",
+      "src": "/favicon-256x256.png",
+      "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "/web-app-manifest-784x910.png",
-      "sizes": "784x910",
+      "src": "/apple-touch-icon-256x256.png",
+      "sizes": "256x256",
       "type": "image/png"
     },
     {
@@ -24,10 +24,9 @@
       "purpose": "maskable"
     },
     {
-      "src": "transformers2-784x789.png",
+      "src": "/transformers2-784x789.png",
       "sizes": "960x958",
       "type": "image/png",
       "purpose": "maskable"
     }
   ]
-}
