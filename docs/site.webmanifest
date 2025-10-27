@@ -18,14 +18,14 @@
       "type": "image/png"
     },
     {
-      "src": "/transformers1-784x910.png",
+      "src": "/web-app-manifest-784x910.png",
       "sizes": "784x910",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/transformers2-784x789.png",
-      "sizes": "960x958",
+      "src": "/web-app-manifest-784x789.png",
+      "sizes": "784x789",
       "type": "image/png",
       "purpose": "maskable"
     }
