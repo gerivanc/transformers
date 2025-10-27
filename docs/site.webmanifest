@@ -18,15 +18,16 @@
       "type": "image/png"
     },
     {
-      "src": "/web-app-manifest-784x910.png",
-      "sizes": "784x910",
+      "src": "/web-app-manifest-256x258.png",
+      "sizes": "256x258",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/web-app-manifest-784x789.png",
-      "sizes": "784x789",
+      "src": "/web-app-manifest-784x910.png",
+      "sizes": "784x910",
       "type": "image/png",
       "purpose": "maskable"
     }
   ]
+
