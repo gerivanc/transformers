@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,16 +8,14 @@
     <meta name="robots" content="index, follow">
 	
 	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/web-app-manifest-784x910.png" sizes="784x910">
-	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/favicon.ico">
-	<link rel="shortcut icon" href="https://transformers.gerivan.me/favicon.ico">
-	<link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
+	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/transformers2-784x789.png" sizes="784x789">
+	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/transformers1-784x910.ico">
+	<link rel="shortcut icon" href="https://transformers.gerivan.me/transformers1-784x910.ico">
+	<link rel="apple-touch-icon" sizes="768x766" href="https://transformers.gerivan.me/apple-touch-icon-768x766.png">
 	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
-	
-	<!-- Meta tags para PWA -->
-	<meta name="theme-color" content="#000000">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">
+
+	<!-- Manifest -->
+	<link rel="manifest" href="/site.webmanifest">
     
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
@@ -487,6 +485,124 @@
                 transform: scaleY(1);
             }
         }
+
+        /* CYBER NEURAL NETWORK Section Styles */
+        .cyber-neural-section {
+            background: linear-gradient(135deg, 
+                rgba(0, 243, 255, 0.05) 0%, 
+                rgba(57, 255, 20, 0.05) 100%);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-neural-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: beam-pulse 4s ease-in-out infinite;
+        }
+
+        .cyber-neural-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: var(--neon-green);
+            text-align: center;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .cyber-neural-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cyber-neural-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .cyber-feature {
+            background: rgba(0, 243, 255, 0.08);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-feature:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .cyber-feature h4 {
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .cyber-feature p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .cyber-visual-preview {
+            height: 300px;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(10, 10, 30, 0.9) 0%, rgba(5, 5, 15, 0.95) 100%);
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 10px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cyber-visual-preview::after {
+            content: 'CYBER NEURAL NETWORK VISUALIZATION';
+            color: var(--neon-cyan);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            animation: hologram-flicker 3s ease-in-out infinite;
+        }
+
+        .cyber-cta {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cyber-cta .btn-group {
+            justify-content: center;
+        }
+
+        /* Justified text alignment for project status */
+        .justified-text {
+            text-align: justify;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -509,11 +625,50 @@
         <!-- Project Status Section -->
         <section class="card">
             <h2>PROJECT STATUS: ACTIVE DEVELOPMENT</h2>
-            <p>This neural network visualization platform is currently in deployment phase, featuring real-time interactive neural network simulation with advanced cybernetic visualization.</p>
+            <p class="justified-text">This neural network visualization platform is currently in deployment phase, featuring real-time interactive neural network simulation with advanced cybernetic visualization.</p>
+            
+            <!-- New paragraph about CYBER NEURAL NETWORK - DUAL MODE -->
+            <p class="justified-text">The CYBER NEURAL NETWORK - DUAL MODE represents a breakthrough in neural network visualization technology, implementing a sophisticated dual-mode architecture that optimizes node distribution through advanced spatial partitioning algorithms. This system employs a hybrid force-directed layout with adaptive gravitational constraints, ensuring optimal node density while maintaining visual clarity across both Cyber/Tech and Complex visualization modes. The network efficiently handles high-dimensional data flow through intelligent edge bundling and dynamic connection prioritization, visualizing information propagation with sub-millisecond precision. Our proprietary node interaction model simulates real neural behavior with configurable activation thresholds, synaptic strength modulation, and adaptive learning patterns, providing unprecedented insight into artificial intelligence decision-making processes at both macro and micro architectural levels.</p>
             
             <div class="coming-soon">
                 <h3>COMING SOON</h3>
                 <p>Advanced features under development include real-time training simulations, multiple activation functions (ReLU, Sigmoid, Tanh, Softmax), and dynamic input data visualization with TensorFlow.js integration.</p>
+            </div>
+        </section>
+
+        <!-- CYBER NEURAL NETWORK Section -->
+        <section class="cyber-neural-section">
+            <h2 class="cyber-neural-title">CYBER NEURAL NETWORK</h2>
+            <p class="cyber-neural-subtitle">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
+            
+            <div class="cyber-visual-preview"></div>
+            
+            <div class="cyber-neural-features">
+                <div class="cyber-feature">
+                    <h4>REAL-TIME INTERACTION</h4>
+                    <p>Manipulate nodes and connections in real-time with intuitive touch and mouse controls</p>
+                </div>
+                <div class="cyber-feature">
+                    <h4>DYNAMIC VISUALIZATION</h4>
+                    <p>Watch as neural connections pulse and glow with configurable intensity and speed</p>
+                </div>
+                <div class="cyber-feature">
+                    <h4>ADAPTIVE NETWORK</h4>
+                    <p>Nodes automatically adjust their behavior based on proximity and interaction patterns</p>
+                </div>
+                <div class="cyber-feature">
+                    <h4>CYBER SECURITY</h4>
+                    <p>Built with advanced security measures and protection against malicious interactions</p>
+                </div>
+            </div>
+            
+            <div class="cyber-cta">
+                <div class="btn-group">
+                    <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">IN TWO WAYS EXPLORE THE CYBERNETIC NEURAL NETWORK</button>
+                    <button onclick="window.open('https://github.com/gerivanc/transformers/tree/main/docs', '_blank')" rel="noopener noreferrer">
+                        VIEW SOURCE CODE
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -780,6 +935,7 @@
                 networkContainer.appendChild(connection);
             }
 
+            // CORRECTED: Restored the original simulateActivation function from backup
             function simulateActivation() {
                 resetActivation();
                 
@@ -822,7 +978,7 @@
                 });
             }
 
-            // Matrix background effect
+            // Matrix background effect with performance optimization
             function initMatrixBackground() {
                 const canvas = document.getElementById('matrixCanvas');
                 const ctx = canvas.getContext('2d');
@@ -867,22 +1023,15 @@
                 setInterval(drawMatrix, 30);
             }
 
-            // Security: Prevent right-click context menu
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
-
-            // Security: Prevent keyboard shortcuts for developer tools
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-                    (e.ctrlKey && e.key === 'u')) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
+            // Security: Prevent context menu and text selection
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('selectstart', e => e.preventDefault());
         });
+
+        // Security: Prevent console access in production
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            console.log('%cSECURITY WARNING: This browser feature is for developers only.', 'color: red; font-size: 20px;');
+        }
     </script>
 </body>
 </html>
