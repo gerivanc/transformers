@@ -277,10 +277,10 @@
             z-index: 5;
         }
         
-        /* Footer text styling */
+        /* Footer text styling - Updated to White (#FFFFFF) */
         footer p {
-            color: #39ff14; /* Neon green as requested */
-            font-weight: bold; /* Bold as requested */
+            color: #FFFFFF; /* White ice as requested */
+            font-weight: bold;
             margin: 5px 0;
         }
         
@@ -334,7 +334,7 @@
         .toggle-buttons {
             display: none;
             position: fixed;
-            bottom: 10px;
+            bottom: 70px; /* Increased from 10px to avoid footer overlap */
             left: 50%;
             transform: translateX(-50%);
             z-index: 20;
@@ -398,14 +398,15 @@
                 pointer-events: none;
             }
             
-            /* Adjust footer for mobile */
+            /* Adjust footer for mobile - increased padding and font size */
             footer {
-                padding: 5px;
+                padding: 15px 5px; /* Increased padding */
+                background-color: rgba(0, 10, 20, 0.8); /* Added background for better visibility */
             }
             
             footer p {
-                font-size: 0.8rem;
-                margin: 2px 0;
+                font-size: 0.85rem; /* Slightly larger font */
+                margin: 3px 0;
             }
         }
         
@@ -417,7 +418,20 @@
             }
             
             footer p {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
+            }
+            
+            /* Further adjust toggle buttons position for very small screens */
+            .toggle-buttons {
+                bottom: 75px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 360px) {
+            .toggle-buttons {
+                flex-direction: column;
+                bottom: 80px;
             }
         }
     </style>
@@ -691,6 +705,11 @@
                 // Add properties for interaction
                 this.draggedNode = null;
                 this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                // Add properties for improved interaction
+                this.interactionRadius = 300;
+                this.interactionStrength = 2;
+                this.lastInteractionTime = 0;
+                this.interactionCooldown = 16; // ~60fps
             }
             
             // Generate nodes and connections for the network
@@ -772,8 +791,16 @@
                     mode === 'cyber' ? 'CYBER/TECH' : 'COMPLEX';
             }
             
-            // Handle mouse/touch interaction
+            // Handle mouse/touch interaction with performance optimization
             handleInteraction(x, y, isDragging = false) {
+                const now = Date.now();
+                
+                // Throttle interactions for better performance
+                if (now - this.lastInteractionTime < this.interactionCooldown) {
+                    return;
+                }
+                this.lastInteractionTime = now;
+                
                 // For mobile, only interact when dragging a specific node
                 if (this.isMobile && this.draggedNode) {
                     this.draggedNode.x = x;
@@ -785,18 +812,23 @@
                     return;
                 }
                 
-                // For desktop, repel nodes from cursor
+                // For desktop, repel nodes from cursor with optimized calculation
                 if (!this.isMobile) {
+                    // Use a more subtle interaction for better user experience
+                    const interactionStrength = this.interactionStrength * 0.7; // Reduced strength for smoother interaction
+                    
                     for (const node of this.nodes) {
                         const dx = node.x - x;
                         const dy = node.y - y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        if (distance < 300) {
-                            // Repel nodes from cursor
-                            const force = (300 - distance) / 300;
-                            node.x += (dx / distance) * force * 2;
-                            node.y += (dy / distance) * force * 2;
+                        if (distance < this.interactionRadius && distance > 0) {
+                            // Calculate repulsion force with inverse square falloff for smoother effect
+                            const force = (this.interactionRadius - distance) / this.interactionRadius;
+                            const repulsion = force * interactionStrength / distance;
+                            
+                            node.x += dx * repulsion;
+                            node.y += dy * repulsion;
                             
                             // Constrain nodes to canvas
                             node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
@@ -808,9 +840,10 @@
             
             // Find node at position (for mobile interaction)
             findNodeAt(x, y) {
-                for (const node of this.nodes) {
-                    if (node.containsPoint(x, y)) {
-                        return node;
+                // Check nodes in reverse order (top-most nodes first)
+                for (let i = this.nodes.length - 1; i >= 0; i--) {
+                    if (this.nodes[i].containsPoint(x, y)) {
+                        return this.nodes[i];
                     }
                 }
                 return null;
@@ -819,11 +852,19 @@
             // Start dragging a node (for mobile)
             startDrag(x, y) {
                 this.draggedNode = this.findNodeAt(x, y);
+                // Visual feedback for node selection
+                if (this.draggedNode) {
+                    this.draggedNode.baseRadius *= 1.5; // Enlarge selected node
+                }
             }
             
             // Stop dragging (for mobile)
             stopDrag() {
-                this.draggedNode = null;
+                if (this.draggedNode) {
+                    // Restore original size
+                    this.draggedNode.baseRadius /= 1.5;
+                    this.draggedNode = null;
+                }
             }
         }
         
@@ -951,13 +992,20 @@
         setupMobileUI();
         animate();
         
-        // Desktop interaction - mouse move
+        // Desktop interaction - mouse move with throttling
+        let mouseMoveTimeout;
         canvas.addEventListener('mousemove', function(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            // Throttle mousemove events for better performance
+            if (mouseMoveTimeout) return;
             
-            network.handleInteraction(x, y);
+            mouseMoveTimeout = setTimeout(() => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                network.handleInteraction(x, y);
+                mouseMoveTimeout = null;
+            }, 16); // ~60fps
         });
         
         // Mobile interaction - touch events
