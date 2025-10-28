@@ -110,6 +110,7 @@
             border: 1px solid #00ffff;
             z-index: 10;
             width: 300px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
         
         /* Control group styling */
@@ -233,6 +234,7 @@
             border: 1px solid #00ffff;
             z-index: 10;
             width: 300px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
         
         /* Project repository title */
@@ -328,17 +330,94 @@
             }
         }
         
+        /* Toggle buttons for mobile */
+        .toggle-buttons {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            gap: 10px;
+        }
+        
+        .toggle-btn {
+            padding: 8px 15px;
+            background: rgba(0, 20, 30, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            color: #00ffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
         /* Mobile responsiveness */
         @media (max-width: 768px) {
+            /* Adjust header spacing for mobile */
+            .header {
+                padding-bottom: 60px;
+            }
+            
+            /* Move mode selector below subtitle on mobile */
+            .node-count {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 10px auto;
+                width: 90%;
+                text-align: center;
+            }
+            
+            /* Adjust controls and card positioning for mobile */
             .controls, .card {
                 width: calc(100vw - 40px);
-                bottom: 80px;
                 left: 20px;
+                right: 20px;
+            }
+            
+            .controls {
+                bottom: 80px;
             }
             
             .card {
                 bottom: 80px;
-                right: 20px;
+            }
+            
+            /* Show toggle buttons on mobile */
+            .toggle-buttons {
+                display: flex;
+            }
+            
+            /* Hide controls and card by default on mobile */
+            .controls.hidden, .card.hidden {
+                transform: translateY(100px);
+                opacity: 0;
+                pointer-events: none;
+            }
+            
+            /* Adjust footer for mobile */
+            footer {
+                padding: 5px;
+            }
+            
+            footer p {
+                font-size: 0.8rem;
+                margin: 2px 0;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            
+            footer p {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -405,6 +484,12 @@
                 </button>
             </div>
         </section>
+        
+        <!-- Toggle buttons for mobile -->
+        <div class="toggle-buttons">
+            <button class="toggle-btn" id="toggleControls">TOGGLE CONTROLS</button>
+            <button class="toggle-btn" id="toggleCard">TOGGLE PROJECT</button>
+        </div>
     </div>
 
     <footer>
@@ -443,6 +528,10 @@
                 this.pulseOffset = Math.random() * Math.PI * 2;
                 this.pulsePhase = 0;
                 this.mode = mode;
+                // Add properties for touch interaction
+                this.isDragging = false;
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
             }
             
             // Update node properties for animation
@@ -504,6 +593,13 @@
                 }
                 
                 ctx.fill();
+            }
+            
+            // Check if point is inside node
+            containsPoint(x, y) {
+                const dx = this.x - x;
+                const dy = this.y - y;
+                return Math.sqrt(dx * dx + dy * dy) <= this.radius;
             }
         }
         
@@ -592,6 +688,9 @@
                 this.pulseSpeed = 10;
                 this.nodeCount = 150;
                 this.mode = 'cyber';
+                // Add properties for interaction
+                this.draggedNode = null;
+                this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             }
             
             // Generate nodes and connections for the network
@@ -672,6 +771,60 @@
                 document.getElementById('modeIndicator').textContent = 
                     mode === 'cyber' ? 'CYBER/TECH' : 'COMPLEX';
             }
+            
+            // Handle mouse/touch interaction
+            handleInteraction(x, y, isDragging = false) {
+                // For mobile, only interact when dragging a specific node
+                if (this.isMobile && this.draggedNode) {
+                    this.draggedNode.x = x;
+                    this.draggedNode.y = y;
+                    
+                    // Constrain node to canvas
+                    this.draggedNode.x = Math.max(this.draggedNode.radius, Math.min(canvas.width - this.draggedNode.radius, this.draggedNode.x));
+                    this.draggedNode.y = Math.max(this.draggedNode.radius, Math.min(canvas.height - this.draggedNode.radius, this.draggedNode.y));
+                    return;
+                }
+                
+                // For desktop, repel nodes from cursor
+                if (!this.isMobile) {
+                    for (const node of this.nodes) {
+                        const dx = node.x - x;
+                        const dy = node.y - y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 300) {
+                            // Repel nodes from cursor
+                            const force = (300 - distance) / 300;
+                            node.x += (dx / distance) * force * 2;
+                            node.y += (dy / distance) * force * 2;
+                            
+                            // Constrain nodes to canvas
+                            node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
+                            node.y = Math.max(node.radius, Math.min(canvas.height - node.radius, node.y));
+                        }
+                    }
+                }
+            }
+            
+            // Find node at position (for mobile interaction)
+            findNodeAt(x, y) {
+                for (const node of this.nodes) {
+                    if (node.containsPoint(x, y)) {
+                        return node;
+                    }
+                }
+                return null;
+            }
+            
+            // Start dragging a node (for mobile)
+            startDrag(x, y) {
+                this.draggedNode = this.findNodeAt(x, y);
+            }
+            
+            // Stop dragging (for mobile)
+            stopDrag() {
+                this.draggedNode = null;
+            }
         }
         
         // Initialize network
@@ -700,6 +853,38 @@
             document.getElementById('pulseSpeedValue').textContent = document.getElementById('pulseSpeed').value;
             document.getElementById('nodeCountValue').textContent = document.getElementById('nodeCountSlider').value;
             document.getElementById('nodeCount').textContent = document.getElementById('nodeCountSlider').value;
+        }
+        
+        // Mobile UI toggle functionality
+        function setupMobileUI() {
+            const controls = document.querySelector('.controls');
+            const card = document.querySelector('.card');
+            const toggleControlsBtn = document.getElementById('toggleControls');
+            const toggleCardBtn = document.getElementById('toggleCard');
+            
+            // Hide panels by default on mobile
+            if (network.isMobile) {
+                controls.classList.add('hidden');
+                card.classList.add('hidden');
+            }
+            
+            // Toggle controls panel
+            toggleControlsBtn.addEventListener('click', function() {
+                controls.classList.toggle('hidden');
+                // If showing controls, hide card to avoid overlap
+                if (!controls.classList.contains('hidden')) {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            // Toggle card panel
+            toggleCardBtn.addEventListener('click', function() {
+                card.classList.toggle('hidden');
+                // If showing card, hide controls to avoid overlap
+                if (!card.classList.contains('hidden')) {
+                    controls.classList.add('hidden');
+                }
+            });
         }
         
         // Event listeners for controls
@@ -763,31 +948,50 @@
         // Initialize
         createBinaryRain();
         updateControlValues();
+        setupMobileUI();
         animate();
         
-        // Interactive elements
+        // Desktop interaction - mouse move
         canvas.addEventListener('mousemove', function(e) {
-            // Create a temporary node at mouse position that affects nearby nodes
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             
-            for (const node of network.nodes) {
-                const dx = node.x - mouseX;
-                const dy = node.y - mouseY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 300) {
-                    // Repel nodes from mouse
-                    const force = (300 - distance) / 300;
-                    node.x += (dx / distance) * force * 2;
-                    node.y += (dy / distance) * force * 2;
-                    
-                    // Constrain nodes to canvas
-                    node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
-                    node.y = Math.max(node.radius, Math.min(canvas.height - node.radius, node.y));
-                }
-            }
+            network.handleInteraction(x, y);
         });
+        
+        // Mobile interaction - touch events
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            network.startDrag(x, y);
+        });
+        
+        canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            network.handleInteraction(x, y, true);
+        });
+        
+        canvas.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            network.stopDrag();
+        });
+        
+        // Prevent default touch behavior to avoid scrolling
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.target === canvas) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
