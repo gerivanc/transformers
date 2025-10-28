@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="strict-origin">
+    <meta name="robots" content="index, follow">
+	
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/transformers2-784x789.png" sizes="784x789">
+	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/transformers1-784x910.ico">
+	<link rel="shortcut icon" href="https://transformers.gerivan.me/transformers1-784x910.ico">
+	<link rel="apple-touch-icon" sizes="768x766" href="https://transformers.gerivan.me/apple-touch-icon-768x766.png">
+	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
+
+	<!-- Manifest -->
+	<link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+	
+    <title>CYBER NEURAL NETWORK - DUAL MODE</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        
+        /* Body styling with cyber theme */
+        body {
+            background-color: #0a0a16;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 100, 0, 0.05) 0%, transparent 20%);
+        }
+        
+        /* Main container */
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header section */
+        .header {
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+        
+        /* Main title styling */
+        h1 {
+            font-size: clamp(1.8rem, 6vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            color: #39ff14; /* Neon green */
+        }
+        
+        /* Subtitle styling */
+        .subtitle {
+            font-size: clamp(1rem, 3.5vw, 1.4rem);
+            font-weight: bold;
+            color: #ff6600; /* Orange */
+            letter-spacing: 2px;
+        }
+        
+        /* Canvas container for neural network visualization */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        /* Canvas element */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Controls panel */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 20, 30, 0.85);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #00ffff;
+            z-index: 10;
+            width: 300px;
+        }
+        
+        /* Control group styling */
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        /* Label styling */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff6600;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        /* Slider container */
+        .slider-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Range input styling */
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #00ffff, #ff6600);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        /* Slider thumb styling */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        /* Value display styling */
+        .value-display {
+            width: 40px;
+            text-align: center;
+            margin-left: 10px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        
+        /* Node count display */
+        .node-count {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 20, 30, 0.7);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #00ffff;
+            z-index: 10;
+            color: #ff6600;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Reset button styles */
+        .reset-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: linear-gradient(to right, #39ff14, #00ffff);
+            border: none;
+            border-radius: 5px;
+            color: #0a0a16;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        
+        /* Mode selector buttons */
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-button {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0, 20, 30, 0.7);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            color: #00ffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-button.active {
+            background: linear-gradient(to right, #39ff14, #00ffff);
+            color: #0a0a16;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.8);
+        }
+        
+        /* Project links section */
+        .card {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 20, 30, 0.85);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #00ffff;
+            z-index: 10;
+            width: 300px;
+        }
+        
+        /* Project repository title */
+        .card h2 {
+            color: #ff6600; /* Orange color as requested */
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Button group for project links */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Project link buttons */
+        .btn-group button {
+            padding: 10px;
+            background: linear-gradient(to right, #39ff14, #00ffff);
+            border: none;
+            border-radius: 5px;
+            color: #0a0a16;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        /* Footer styling */
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            z-index: 5;
+        }
+        
+        /* Footer text styling */
+        footer p {
+            color: #39ff14; /* Neon green as requested */
+            font-weight: bold; /* Bold as requested */
+            margin: 5px 0;
+        }
+        
+        /* Scan line animation */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #00ffff, transparent);
+            animation: scan 5s linear infinite;
+            z-index: 5;
+        }
+        
+        /* Scan animation keyframes */
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        
+        /* Binary rain container */
+        .binary-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        /* Binary digit styling */
+        .binary-digit {
+            position: absolute;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            animation: fall linear infinite;
+        }
+        
+        /* Binary rain animation */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .controls, .card {
+                width: calc(100vw - 40px);
+                bottom: 80px;
+                left: 20px;
+            }
+            
+            .card {
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CYBER NEURAL NETWORK</h1>
+            <div class="subtitle">INTERACTIVE NODE VISUALIZATION - DUAL MODE</div>
+        </div>
+        
+        <div class="node-count">
+            NODES: <span id="nodeCount">150</span> | MODE: <span id="modeIndicator">CYBER/TECH</span>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="networkCanvas"></canvas>
+            <div class="scan-line"></div>
+            <div class="binary-rain" id="binaryRain"></div>
+        </div>
+        
+        <div class="controls">
+            <div class="mode-selector">
+                <button class="mode-button active" id="cyberModeBtn">CYBER/TECH MODE</button>
+                <button class="mode-button" id="complexModeBtn">COMPLEX MODE</button>
+            </div>
+            
+            <div class="control-group">
+                <label for="nodeIntensity">NODE INTENSITY</label>
+                <div class="slider-container">
+                    <input type="range" id="nodeIntensity" min="0" max="100" value="70">
+                    <div class="value-display" id="nodeIntensityValue">70</div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label for="pulseSpeed">PULSE SPEED</label>
+                <div class="slider-container">
+                    <input type="range" id="pulseSpeed" min="1" max="20" value="10">
+                    <div class="value-display" id="pulseSpeedValue">10</div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label for="nodeCountSlider">NODE COUNT</label>
+                <div class="slider-container">
+                    <input type="range" id="nodeCountSlider" min="50" max="500" value="150">
+                    <div class="value-display" id="nodeCountValue">150</div>
+                </div>
+            </div>
+            
+            <button class="reset-button" id="resetButton">RESET VISUALIZATION</button>
+        </div>
+        
+        <!-- Project Links -->
+        <section class="card">
+            <h2>PROJECT REPOSITORY</h2>
+            <div class="btn-group">
+                <button onclick="window.open('https://transformers.gerivan.me/', '_blank')">
+                    HOME NEURAL NETWORK
+                </button>
+                <button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/LICENSE', '_blank')">
+                    LICENSE AGREEMENT
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Copyright © 2025 Gerivan Costa dos Santos</p>
+            <p>Transformers Interactive Neural Network Visualizer © 2025</p>
+            <p>Secure Connection Established • Neural Network Active</p>
+        </div>
+    </footer>
+
+    <script>
+        // Neural Network Visualization
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas to full window size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Mode management
+        let currentMode = 'cyber'; // 'cyber' or 'complex'
+        
+        // Node class for neural network visualization
+        class Node {
+            constructor(x, y, radius, color, mode) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.baseRadius = radius;
+                this.color = color;
+                this.pulseOffset = Math.random() * Math.PI * 2;
+                this.pulsePhase = 0;
+                this.mode = mode;
+            }
+            
+            // Update node properties for animation
+            update(pulseSpeed) {
+                this.pulsePhase += 0.01 * pulseSpeed * (this.mode === 'cyber' ? 1.5 : 1);
+                this.radius = this.baseRadius + Math.sin(this.pulsePhase + this.pulseOffset) * 
+                    (this.mode === 'cyber' ? 3 : 2);
+            }
+            
+            // Draw node on canvas
+            draw(ctx) {
+                // Complex mode has glow effects
+                if (this.mode === 'complex') {
+                    // Draw glow effect
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, this.radius,
+                        this.x, this.y, this.radius * 2
+                    );
+                    
+                    if (this.color === 'green') {
+                        gradient.addColorStop(0, 'rgba(57, 255, 20, 0.8)');
+                        gradient.addColorStop(1, 'rgba(57, 255, 20, 0)');
+                    } else if (this.color === 'cyan') {
+                        gradient.addColorStop(0, 'rgba(0, 255, 255, 0.8)');
+                        gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                    } else if (this.color === 'orange') {
+                        gradient.addColorStop(0, 'rgba(255, 100, 0, 0.8)');
+                        gradient.addColorStop(1, 'rgba(255, 100, 0, 0)');
+                    } else {
+                        gradient.addColorStop(0, 'rgba(255, 0, 0, 0.8)');
+                        gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+                    }
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // Draw inner glow for complex mode
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * 0.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.fill();
+                }
+                
+                // Draw node
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                
+                // Set color based on node type
+                if (this.color === 'green') {
+                    ctx.fillStyle = '#39ff14';
+                } else if (this.color === 'cyan') {
+                    ctx.fillStyle = '#00ffff';
+                } else if (this.color === 'orange') {
+                    ctx.fillStyle = '#ff6600';
+                } else {
+                    ctx.fillStyle = '#ff0000';
+                }
+                
+                ctx.fill();
+            }
+        }
+        
+        // Connection class for links between nodes
+        class Connection {
+            constructor(node1, node2, mode) {
+                this.node1 = node1;
+                this.node2 = node2;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.mode = mode;
+            }
+            
+            // Update connection properties for animation
+            update(pulseSpeed) {
+                this.pulsePhase += 0.01 * pulseSpeed * (this.mode === 'cyber' ? 1.5 : 1);
+            }
+            
+            // Draw connection on canvas
+            draw(ctx) {
+                const dx = this.node2.x - this.node1.x;
+                const dy = this.node2.y - this.node1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Only draw connections for nearby nodes
+                const maxDistance = this.mode === 'cyber' ? 150 : 200;
+                if (distance > maxDistance) return;
+                
+                const pulse = Math.sin(this.pulsePhase) * 0.5 + 0.5;
+                const alpha = (0.3 + pulse * 0.7) * (1 - distance / maxDistance);
+                
+                ctx.beginPath();
+                ctx.moveTo(this.node1.x, this.node1.y);
+                ctx.lineTo(this.node2.x, this.node2.y);
+                
+                // Complex mode has gradient connections
+                if (this.mode === 'complex') {
+                    // Determine connection color based on node colors
+                    let color1, color2;
+                    
+                    if (this.node1.color === 'green') {
+                        color1 = [57, 255, 20];
+                    } else if (this.node1.color === 'cyan') {
+                        color1 = [0, 255, 255];
+                    } else if (this.node1.color === 'orange') {
+                        color1 = [255, 100, 0];
+                    } else {
+                        color1 = [255, 0, 0];
+                    }
+                    
+                    if (this.node2.color === 'green') {
+                        color2 = [57, 255, 20];
+                    } else if (this.node2.color === 'cyan') {
+                        color2 = [0, 255, 255];
+                    } else if (this.node2.color === 'orange') {
+                        color2 = [255, 100, 0];
+                    } else {
+                        color2 = [255, 0, 0];
+                    }
+                    
+                    // Create gradient for connection
+                    const gradient = ctx.createLinearGradient(
+                        this.node1.x, this.node1.y,
+                        this.node2.x, this.node2.y
+                    );
+                    
+                    gradient.addColorStop(0, `rgba(${color1[0]}, ${color1[1]}, ${color1[2]}, ${alpha})`);
+                    gradient.addColorStop(1, `rgba(${color2[0]}, ${color2[1]}, ${color2[2]}, ${alpha})`);
+                    
+                    ctx.strokeStyle = gradient;
+                } else {
+                    // Cyber mode has simpler cyan connections
+                    ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
+                }
+                
+                ctx.lineWidth = 1 + pulse * (this.mode === 'cyber' ? 2 : 1);
+                ctx.stroke();
+            }
+        }
+        
+        // Network class to manage nodes and connections
+        class Network {
+            constructor() {
+                this.nodes = [];
+                this.connections = [];
+                this.nodeIntensity = 70;
+                this.pulseSpeed = 10;
+                this.nodeCount = 150;
+                this.mode = 'cyber';
+            }
+            
+            // Generate nodes and connections for the network
+            generateNodes() {
+                this.nodes = [];
+                this.connections = [];
+                
+                for (let i = 0; i < this.nodeCount; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const radius = 3 + Math.random() * 4;
+                    
+                    // Assign colors with distribution
+                    const rand = Math.random();
+                    let color;
+                    if (rand < 0.35) {
+                        color = 'green';
+                    } else if (rand < 0.65) {
+                        color = 'cyan';
+                    } else if (rand < 0.85) {
+                        color = 'orange';
+                    } else {
+                        color = 'red';
+                    }
+                    
+                    this.nodes.push(new Node(x, y, radius, color, this.mode));
+                }
+                
+                // Create connections between nearby nodes
+                for (let i = 0; i < this.nodes.length; i++) {
+                    for (let j = i + 1; j < this.nodes.length; j++) {
+                        const dx = this.nodes[i].x - this.nodes[j].x;
+                        const dy = this.nodes[i].y - this.nodes[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        const connectionChance = this.mode === 'cyber' ? 0.4 : 0.3;
+                        const maxDistance = this.mode === 'cyber' ? 120 : 150;
+                        
+                        if (distance < maxDistance && Math.random() < connectionChance) {
+                            this.connections.push(new Connection(this.nodes[i], this.nodes[j], this.mode));
+                        }
+                    }
+                }
+            }
+            
+            // Update all nodes and connections
+            update() {
+                for (const node of this.nodes) {
+                    node.update(this.pulseSpeed);
+                }
+                
+                for (const connection of this.connections) {
+                    connection.update(this.pulseSpeed);
+                }
+            }
+            
+            // Draw the entire network
+            draw() {
+                // Clear canvas with a slight fade effect for trails
+                ctx.fillStyle = this.mode === 'cyber' ? 'rgba(10, 10, 22, 0.05)' : 'rgba(10, 10, 22, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections first (so they appear behind nodes)
+                for (const connection of this.connections) {
+                    connection.draw(ctx);
+                }
+                
+                // Draw nodes
+                for (const node of this.nodes) {
+                    node.draw(ctx);
+                }
+            }
+            
+            // Change mode and regenerate network
+            setMode(mode) {
+                this.mode = mode;
+                this.generateNodes();
+                document.getElementById('modeIndicator').textContent = 
+                    mode === 'cyber' ? 'CYBER/TECH' : 'COMPLEX';
+            }
+        }
+        
+        // Initialize network
+        const network = new Network();
+        network.generateNodes();
+        
+        // Create binary rain effect for cyber aesthetic
+        function createBinaryRain() {
+            const binaryRain = document.getElementById('binaryRain');
+            const digits = '01';
+            
+            for (let i = 0; i < 100; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'binary-digit';
+                digit.textContent = digits.charAt(Math.floor(Math.random() * digits.length));
+                digit.style.left = Math.random() * 100 + 'vw';
+                digit.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                digit.style.animationDelay = Math.random() * 5 + 's';
+                binaryRain.appendChild(digit);
+            }
+        }
+        
+        // Update control values display
+        function updateControlValues() {
+            document.getElementById('nodeIntensityValue').textContent = document.getElementById('nodeIntensity').value;
+            document.getElementById('pulseSpeedValue').textContent = document.getElementById('pulseSpeed').value;
+            document.getElementById('nodeCountValue').textContent = document.getElementById('nodeCountSlider').value;
+            document.getElementById('nodeCount').textContent = document.getElementById('nodeCountSlider').value;
+        }
+        
+        // Event listeners for controls
+        document.getElementById('nodeIntensity').addEventListener('input', function() {
+            network.nodeIntensity = this.value;
+            updateControlValues();
+        });
+        
+        document.getElementById('pulseSpeed').addEventListener('input', function() {
+            network.pulseSpeed = this.value;
+            updateControlValues();
+        });
+        
+        document.getElementById('nodeCountSlider').addEventListener('input', function() {
+            network.nodeCount = this.value;
+            network.generateNodes();
+            updateControlValues();
+        });
+        
+        // Reset button functionality
+        document.getElementById('resetButton').addEventListener('click', function() {
+            // Reset all sliders to default values
+            document.getElementById('nodeIntensity').value = 70;
+            document.getElementById('pulseSpeed').value = 10;
+            document.getElementById('nodeCountSlider').value = 150;
+            
+            // Update network with default values
+            network.nodeIntensity = 70;
+            network.pulseSpeed = 10;
+            network.nodeCount = 150;
+            
+            // Regenerate nodes
+            network.generateNodes();
+            
+            // Update display values
+            updateControlValues();
+        });
+        
+        // Mode selector functionality
+        document.getElementById('cyberModeBtn').addEventListener('click', function() {
+            currentMode = 'cyber';
+            network.setMode('cyber');
+            document.getElementById('cyberModeBtn').classList.add('active');
+            document.getElementById('complexModeBtn').classList.remove('active');
+        });
+        
+        document.getElementById('complexModeBtn').addEventListener('click', function() {
+            currentMode = 'complex';
+            network.setMode('complex');
+            document.getElementById('complexModeBtn').classList.add('active');
+            document.getElementById('cyberModeBtn').classList.remove('active');
+        });
+        
+        // Animation loop
+        function animate() {
+            network.update();
+            network.draw();
+            requestAnimationFrame(animate);
+        }
+        
+        // Initialize
+        createBinaryRain();
+        updateControlValues();
+        animate();
+        
+        // Interactive elements
+        canvas.addEventListener('mousemove', function(e) {
+            // Create a temporary node at mouse position that affects nearby nodes
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            for (const node of network.nodes) {
+                const dx = node.x - mouseX;
+                const dy = node.y - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 300) {
+                    // Repel nodes from mouse
+                    const force = (300 - distance) / 300;
+                    node.x += (dx / distance) * force * 2;
+                    node.y += (dy / distance) * force * 2;
+                    
+                    // Constrain nodes to canvas
+                    node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
+                    node.y = Math.max(node.radius, Math.min(canvas.height - node.radius, node.y));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
