@@ -63,6 +63,7 @@
             text-align: center;
             padding: 20px;
             z-index: 10;
+            position: relative;
         }
         
         /* Main title styling */
@@ -80,6 +81,7 @@
             font-weight: bold;
             color: #ff6600; /* Orange */
             letter-spacing: 2px;
+            margin-bottom: 15px; /* Added margin for spacing */
         }
         
         /* Canvas container for neural network visualization */
@@ -164,13 +166,12 @@
             font-weight: bold;
         }
         
-        /* Node count display */
+        /* Node count display - UPDATED FOR DESKTOP */
         .node-count {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(0, 20, 30, 0.7);
-            padding: 10px 15px;
+            position: relative;
+            display: inline-block;
+            background-color: transparent; /* Transparent background */
+            padding: 8px 15px; /* Reduced padding for smaller size */
             border-radius: 5px;
             border: 1px solid #00ffff;
             z-index: 10;
@@ -178,6 +179,8 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-size: 0.9rem; /* Slightly smaller font */
+            margin: 0 auto; /* Center alignment */
         }
         
         /* Reset button styles */
@@ -369,6 +372,8 @@
                 margin: 10px auto;
                 width: 90%;
                 text-align: center;
+                background-color: transparent; /* Make background transparent */
+                border: 1px solid #00ffff;
             }
             
             /* Adjust controls and card positioning for mobile */
@@ -378,12 +383,14 @@
                 right: 20px;
             }
             
+            /* Position controls higher to avoid toggle buttons */
             .controls {
-                bottom: 80px;
+                bottom: 140px; /* Increased to avoid toggle buttons */
             }
             
+            /* Position card higher to avoid toggle buttons */
             .card {
-                bottom: 80px;
+                bottom: 140px; /* Increased to avoid toggle buttons */
             }
             
             /* Show toggle buttons on mobile */
@@ -410,6 +417,40 @@
             }
         }
         
+        /* Desktop-specific adjustments */
+        @media (min-width: 769px) {
+            /* Position mode selector inline with subtitle */
+            .node-count {
+                position: relative;
+                display: inline-block;
+                top: auto;
+                right: auto;
+                margin: 0 0 0 20px; /* Margin to separate from subtitle */
+                width: auto;
+                text-align: center;
+                background-color: transparent; /* Make background transparent */
+                border: 1px solid #00ffff;
+                vertical-align: middle; /* Align with subtitle */
+            }
+            
+            /* Header container for proper alignment */
+            .header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            /* Subtitle container for inline alignment with node-count */
+            .subtitle-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 15px;
+            }
+        }
+        
         /* Very small screens */
         @media (max-width: 480px) {
             .toggle-btn {
@@ -425,6 +466,15 @@
             .toggle-buttons {
                 bottom: 75px;
             }
+            
+            /* Adjust control panel position for very small screens */
+            .controls {
+                bottom: 150px; /* Increased to avoid toggle buttons */
+            }
+            
+            .card {
+                bottom: 150px; /* Increased to avoid toggle buttons */
+            }
         }
         
         /* Extra small screens */
@@ -433,6 +483,15 @@
                 flex-direction: column;
                 bottom: 80px;
             }
+            
+            /* Adjust control panel position for extra small screens */
+            .controls {
+                bottom: 160px; /* Increased to avoid toggle buttons */
+            }
+            
+            .card {
+                bottom: 160px; /* Increased to avoid toggle buttons */
+            }
         }
     </style>
 </head>
@@ -440,11 +499,14 @@
     <div class="container">
         <div class="header">
             <h1>CYBER NEURAL NETWORK</h1>
-            <div class="subtitle">INTERACTIVE NODE VISUALIZATION - DUAL MODE</div>
-        </div>
-        
-        <div class="node-count">
-            NODES: <span id="nodeCount">150</span> | MODE: <span id="modeIndicator">CYBER/TECH</span>
+            <!-- Container for subtitle and mode indicator for proper alignment -->
+            <div class="subtitle-container">
+                <div class="subtitle">INTERACTIVE NODE VISUALIZATION - DUAL MODE</div>
+                <!-- Mode indicator positioned inline with subtitle -->
+                <div class="node-count">
+                    NODES: <span id="nodeCount">150</span> | MODE: <span id="modeIndicator">CYBER/TECH</span>
+                </div>
+            </div>
         </div>
         
         <div class="canvas-container">
@@ -979,43 +1041,23 @@
             document.getElementById('cyberModeBtn').classList.remove('active');
         });
         
-        // Animation loop
-        function animate() {
-            network.update();
-            network.draw();
-            requestAnimationFrame(animate);
-        }
-        
-        // Initialize
-        createBinaryRain();
-        updateControlValues();
-        setupMobileUI();
-        animate();
-        
-        // Desktop interaction - mouse move with throttling
-        let mouseMoveTimeout;
+        // Mouse interaction for desktop
         canvas.addEventListener('mousemove', function(e) {
-            // Throttle mousemove events for better performance
-            if (mouseMoveTimeout) return;
-            
-            mouseMoveTimeout = setTimeout(() => {
+            if (!network.isMobile) {
                 const rect = canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
                 network.handleInteraction(x, y);
-                mouseMoveTimeout = null;
-            }, 16); // ~60fps
+            }
         });
         
-        // Mobile interaction - touch events
+        // Touch interaction for mobile
         canvas.addEventListener('touchstart', function(e) {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
             const touch = e.touches[0];
             const x = touch.clientX - rect.left;
             const y = touch.clientY - rect.top;
-            
             network.startDrag(x, y);
         });
         
@@ -1025,7 +1067,6 @@
             const touch = e.touches[0];
             const x = touch.clientX - rect.left;
             const y = touch.clientY - rect.top;
-            
             network.handleInteraction(x, y, true);
         });
         
@@ -1034,12 +1075,19 @@
             network.stopDrag();
         });
         
-        // Prevent default touch behavior to avoid scrolling
-        document.body.addEventListener('touchmove', function(e) {
-            if (e.target === canvas) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // Initialize the visualization
+        createBinaryRain();
+        updateControlValues();
+        setupMobileUI();
+        
+        // Animation loop
+        function animate() {
+            network.update();
+            network.draw();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
     </script>
 </body>
 </html>
