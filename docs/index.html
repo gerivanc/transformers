@@ -17,10 +17,10 @@
 	<!-- Manifest -->
 	<link rel="manifest" href="/site.webmanifest">
     
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <!-- Security Headers - MODIFIED: Updated CSP to allow iframes from transformers domain -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https://transformers.gerivan.me;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://transformers.gerivan.me">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
     <title>TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</title>
@@ -37,6 +37,8 @@
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
             --glow-intensity: 0.8;
+            --vibrant-orange: #ff6600; /* Added vibrant orange from the second file */
+            --normal-green: #39ff14; /* Added normal green without effects */
         }
 
         /* Base reset and security-focused styling */
@@ -114,8 +116,7 @@
             white-space: nowrap;
             margin: 0 auto;
             animation: 
-                projection-scan 15s linear infinite,
-                hologram-flicker 3s ease-in-out infinite;
+                projection-scan 15s linear infinite;
             position: relative;
             width: fit-content;
             padding: 10px 0;
@@ -129,8 +130,8 @@
             background: linear-gradient(135deg, 
                 rgba(10, 10, 10, 0.9) 0%, 
                 rgba(5, 5, 5, 0.95) 100%);
-            border-bottom: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            border-bottom: 2px solid var(--normal-green);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
             overflow: hidden;
         }
 
@@ -139,19 +140,17 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-green));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: var(--normal-green); /* Changed to normal green without effects */
         }
 
         .subtitle {
             font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--text-secondary);
+            color: var(--vibrant-orange); /* Changed to vibrant orange */
             margin-bottom: 30px;
             line-height: 1.6;
             position: relative;
             z-index: 2;
+            font-weight: bold; /* Added bold font weight */
         }
 
         /* Card components with glassmorphism effect */
@@ -193,10 +192,9 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 25px;
-            color: var(--neon-green);
-            border-left: 4px solid var(--neon-green);
+            color: var(--normal-green); /* Changed to normal green */
+            border-left: 4px solid var(--normal-green); /* Changed to normal green */
             padding-left: 15px;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
         }
 
         /* Neural network visualization container */
@@ -238,7 +236,7 @@
             -webkit-appearance: none;
             width: 100%;
             height: 8px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+            background: linear-gradient(90deg, var(--neon-cyan), var(--normal-green)); /* Changed to normal green */
             border-radius: 4px;
             outline: none;
             margin: 10px 0;
@@ -255,7 +253,7 @@
         }
 
         .range-value {
-            color: var(--neon-green);
+            color: var(--normal-green); /* Changed to normal green */
             font-weight: bold;
             text-align: right;
         }
@@ -327,14 +325,40 @@
         }
 
         .active {
-            background: radial-gradient(circle, var(--neon-green), #ff0080);
-            box-shadow: 0 0 20px var(--neon-green);
+            background: radial-gradient(circle, var(--normal-green), #ff0080); /* Changed to normal green */
+            box-shadow: 0 0 20px var(--normal-green); /* Changed to normal green */
             animation: pulse 1s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
+        }
+
+        /* NEW: Infinite animation for continuous neural activity */
+        .infinite-active {
+            background: radial-gradient(circle, var(--normal-green), #ff0080);
+            box-shadow: 0 0 20px var(--normal-green);
+            animation: infinitePulse 2s infinite;
+        }
+
+        @keyframes infinitePulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            25% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            75% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
         }
 
         /* Coming soon section */
@@ -369,7 +393,7 @@
             background: rgba(0, 243, 255, 0.05);
             padding: 20px;
             border-radius: 10px;
-            border-left: 3px solid var(--neon-green);
+            border-left: 3px solid var(--normal-green); /* Changed to normal green */
         }
 
         .spec-item h4 {
@@ -382,7 +406,7 @@
             text-align: center;
             padding: 40px 20px;
             margin-top: 60px;
-            border-top: 2px solid var(--neon-cyan);
+            border-top: 2px solid var(--normal-green); /* Changed to normal green */
             background: linear-gradient(135deg, 
                 rgba(10, 10, 10, 0.9) 0%, 
                 rgba(5, 5, 5, 0.95) 100%);
@@ -390,7 +414,8 @@
 
         footer p {
             margin: 10px 0;
-            color: var(--text-secondary);
+            color: #ffffff; /* Changed to white */
+            font-weight: bold; /* Added bold font weight */
         }
 
         /* Responsive design */
@@ -418,8 +443,7 @@
             
             .projection-title {
                 animation: 
-                    projection-scan 20s linear infinite,
-                    hologram-flicker 4s ease-in-out infinite;
+                    projection-scan 20s linear infinite;
             }
         }
 
@@ -435,7 +459,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            background: linear-gradient(90deg, transparent, var(--normal-green), transparent); /* Changed to normal green */
             animation: security-scan 3s linear infinite;
             z-index: 1000;
             pointer-events: none;
@@ -515,9 +539,8 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 20px;
-            color: var(--neon-green);
+            color: var(--normal-green); /* Changed to normal green */
             text-align: center;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
         }
 
         .cyber-neural-subtitle {
@@ -603,6 +626,84 @@
             line-height: 1.6;
             margin-bottom: 20px;
         }
+
+        /* NEW: Iframe container styling */
+        .iframe-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .preview-iframe {
+            width: 25cm;
+            height: 21cm;
+            border: 2px solid var(--normal-green);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+            background-color: var(--dark-bg);
+        }
+
+        /* NEW: Fallback styling for iframe */
+        .iframe-fallback {
+            width: 21cm;
+            height: 15cm;
+            border: 2px solid var(--normal-green);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(10, 10, 30, 0.9) 0%, rgba(5, 5, 15, 0.95) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-cyan);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .iframe-fallback h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .iframe-fallback p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .iframe-fallback button {
+            margin-top: 10px;
+        }
+
+        /* NEW: Responsive adjustments for iframe */
+        @media (max-width: 1200px) {
+            .preview-iframe, .iframe-fallback {
+                width: 90%;
+                height: 700px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .preview-iframe, .iframe-fallback {
+                width: 95%;
+                height: 700px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preview-iframe, .iframe-fallback {
+                width: 100%;
+                height: 400px;
+            }
+            
+            .iframe-fallback h3 {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -641,7 +742,34 @@
             <h2 class="cyber-neural-title">CYBER NEURAL NETWORK</h2>
             <p class="cyber-neural-subtitle">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
             
-            <div class="cyber-visual-preview"></div>
+            <!-- NEW: Iframe preview of the neural network visualization with fallback -->
+            <div class="iframe-container">
+                <iframe src="https://transformers.gerivan.me/neural.html" 
+                        class="preview-iframe" 
+                        title="Cyber Neural Network Preview"
+                        allowfullscreen
+                        onerror="showIframeFallback(this)">
+                </iframe>
+                <!-- Fallback content that appears if iframe fails to load -->
+                <div class="iframe-fallback" id="iframeFallback" style="display: none;">
+                    <h3>NEURAL NETWORK PREVIEW UNAVAILABLE</h3>
+                    <p>The interactive neural network visualization could not be loaded directly.</p>
+                    <p>This may be due to security restrictions or network connectivity.</p>
+                    <button onclick="window.open('https://transformers.gerivan.me/neural.html', '_blank')">
+                        OPEN NEURAL NETWORK IN NEW TAB
+                    </button>
+                </div>
+            </div>
+            
+            <!-- MOVED: Buttons moved to be below the iframe and centered -->
+            <div class="cyber-cta">
+                <div class="btn-group">
+                    <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">IN TWO WAYS EXPLORE THE CYBERNETIC NEURAL NETWORK</button>
+                    <button onclick="window.open('https://github.com/gerivanc/transformers/tree/main/docs', '_blank')" rel="noopener noreferrer">
+                        VIEW SOURCE CODE
+                    </button>
+                </div>
+            </div>
             
             <div class="cyber-neural-features">
                 <div class="cyber-feature">
@@ -659,15 +787,6 @@
                 <div class="cyber-feature">
                     <h4>CYBER SECURITY</h4>
                     <p>Built with advanced security measures and protection against malicious interactions</p>
-                </div>
-            </div>
-            
-            <div class="cyber-cta">
-                <div class="btn-group">
-                    <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">IN TWO WAYS EXPLORE THE CYBERNETIC NEURAL NETWORK</button>
-                    <button onclick="window.open('https://github.com/gerivanc/transformers/tree/main/docs', '_blank')" rel="noopener noreferrer">
-                        VIEW SOURCE CODE
-                    </button>
                 </div>
             </div>
         </section>
@@ -700,6 +819,7 @@
             <div class="btn-group">
                 <button id="update-network">UPDATE NETWORK ARCHITECTURE</button>
                 <button id="simulate">INITIATE ACTIVATION SIMULATION</button>
+                <button id="simulate-infinite">START INFINITE ACTIVATION</button>
                 <button id="reset">SYSTEM RESET</button>
             </div>
         </section>
@@ -771,7 +891,12 @@
             const outputNeuronsSlider = document.getElementById('output-neurons');
             const updateButton = document.getElementById('update-network');
             const simulateButton = document.getElementById('simulate');
+            const simulateInfiniteButton = document.getElementById('simulate-infinite');
             const resetButton = document.getElementById('reset');
+
+            // NEW: Variables to track animation state
+            let isInfiniteAnimationActive = false;
+            let infiniteAnimationInterval = null;
 
             // Security: Input validation and sanitization
             function sanitizeInput(value, min, max, defaultValue) {
@@ -829,8 +954,24 @@
                 simulateActivation();
             });
 
+            // NEW: Infinite activation simulation
+            simulateInfiniteButton.addEventListener('click', function() {
+                if (isInfiniteAnimationActive) {
+                    stopInfiniteActivation();
+                    this.textContent = "START INFINITE ACTIVATION";
+                } else {
+                    startInfiniteActivation();
+                    this.textContent = "STOP INFINITE ACTIVATION";
+                }
+            });
+
             resetButton.addEventListener('click', function() {
                 resetActivation();
+                // Also stop infinite animation if active
+                if (isInfiniteAnimationActive) {
+                    stopInfiniteActivation();
+                    simulateInfiniteButton.textContent = "START INFINITE ACTIVATION";
+                }
             });
 
             // Neural network creation with security bounds
@@ -897,12 +1038,12 @@
                     layers[layerIndex].push(neuron);
                 });
 
-                const layerIndices = Object.keys(layers).sort((a, b) => a - b);
-                
+                const layerIndices = Object.keys(layers).map(Number).sort((a, b) => a - b);
+
                 for (let i = 0; i < layerIndices.length - 1; i++) {
                     const currentLayer = layers[layerIndices[i]];
                     const nextLayer = layers[layerIndices[i + 1]];
-                    
+
                     currentLayer.forEach(currentNeuron => {
                         nextLayer.forEach(nextNeuron => {
                             createConnection(currentNeuron, nextNeuron);
@@ -919,69 +1060,124 @@
                 const toRect = toNeuron.getBoundingClientRect();
                 const containerRect = networkContainer.getBoundingClientRect();
                 
-                const fromX = fromRect.left + fromRect.width/2 - containerRect.left;
-                const fromY = fromRect.top + fromRect.height/2 - containerRect.top;
-                const toX = toRect.left + toRect.width/2 - containerRect.left;
-                const toY = toRect.top + toRect.height/2 - containerRect.top;
+                // Security: Validate coordinates
+                const x1 = fromRect.left + fromRect.width / 2 - containerRect.left;
+                const y1 = fromRect.top + fromRect.height / 2 - containerRect.top;
+                const x2 = toRect.left + toRect.width / 2 - containerRect.left;
+                const y2 = toRect.top + toRect.height / 2 - containerRect.top;
                 
-                const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
-                const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
                 
                 connection.style.width = `${length}px`;
-                connection.style.left = `${fromX}px`;
-                connection.style.top = `${fromY}px`;
+                connection.style.left = `${x1}px`;
+                connection.style.top = `${y1}px`;
                 connection.style.transform = `rotate(${angle}deg)`;
                 
                 networkContainer.appendChild(connection);
             }
 
-            // CORRECTED: Restored the original simulateActivation function from backup
             function simulateActivation() {
-                resetActivation();
+                const neurons = document.querySelectorAll('.neuron');
+                const connections = document.querySelectorAll('.connection');
                 
+                // Security: Limit animation duration
+                neurons.forEach(neuron => {
+                    neuron.classList.add('active');
+                });
+                
+                connections.forEach(connection => {
+                    connection.style.background = 'linear-gradient(90deg, var(--normal-green), var(--neon-purple))';
+                    connection.style.boxShadow = '0 0 10px var(--normal-green)';
+                });
+                
+                // Security: Clear animation after safe duration
                 setTimeout(() => {
-                    document.querySelectorAll('.neuron[data-layer="input"]').forEach(neuron => {
-                        neuron.classList.add('active');
+                    neurons.forEach(neuron => {
+                        neuron.classList.remove('active');
                     });
-                }, 500);
-                
-                setTimeout(() => {
-                    document.querySelectorAll('.neuron[data-layer="hidden"]').forEach(neuron => {
-                        if (parseInt(neuron.dataset.layerIndex) === 1) {
-                            neuron.classList.add('active');
-                        }
+                    
+                    connections.forEach(connection => {
+                        connection.style.background = 'linear-gradient(90deg, var(--neon-cyan), transparent)';
+                        connection.style.boxShadow = 'none';
                     });
-                }, 1000);
-                
-                let delay = 1500;
-                for (let i = 2; i <= parseInt(hiddenLayersSlider.value); i++) {
-                    setTimeout(() => {
-                        document.querySelectorAll('.neuron[data-layer="hidden"]').forEach(neuron => {
-                            if (parseInt(neuron.dataset.layerIndex) === i) {
-                                neuron.classList.add('active');
-                            }
-                        });
-                    }, delay);
-                    delay += 500;
-                }
-                
-                setTimeout(() => {
-                    document.querySelectorAll('.neuron[data-layer="output"]').forEach(neuron => {
-                        neuron.classList.add('active');
-                    });
-                }, delay);
+                }, 3000);
             }
 
-            function resetActivation() {
-                document.querySelectorAll('.neuron').forEach(neuron => {
+            // NEW: Infinite activation function
+            function startInfiniteActivation() {
+                isInfiniteAnimationActive = true;
+                const neurons = document.querySelectorAll('.neuron');
+                const connections = document.querySelectorAll('.connection');
+                
+                // Clear any existing animations first
+                neurons.forEach(neuron => {
                     neuron.classList.remove('active');
+                    neuron.classList.add('infinite-active');
+                });
+                
+                connections.forEach(connection => {
+                    connection.style.background = 'linear-gradient(90deg, var(--normal-green), var(--neon-purple))';
+                    connection.style.boxShadow = '0 0 10px var(--normal-green)';
+                });
+                
+                // Create a pulsing effect for connections
+                infiniteAnimationInterval = setInterval(() => {
+                    connections.forEach(connection => {
+                        const pulseIntensity = 0.5 + Math.random() * 0.5;
+                        connection.style.opacity = pulseIntensity;
+                    });
+                }, 500);
+            }
+
+            // NEW: Stop infinite activation
+            function stopInfiniteActivation() {
+                isInfiniteAnimationActive = false;
+                if (infiniteAnimationInterval) {
+                    clearInterval(infiniteAnimationInterval);
+                    infiniteAnimationInterval = null;
+                }
+                
+                const neurons = document.querySelectorAll('.neuron');
+                const connections = document.querySelectorAll('.connection');
+                
+                neurons.forEach(neuron => {
+                    neuron.classList.remove('infinite-active');
+                });
+                
+                connections.forEach(connection => {
+                    connection.style.background = 'linear-gradient(90deg, var(--neon-cyan), transparent)';
+                    connection.style.boxShadow = 'none';
+                    connection.style.opacity = '1';
                 });
             }
 
-            // Matrix background effect with performance optimization
+            function resetActivation() {
+                const neurons = document.querySelectorAll('.neuron');
+                const connections = document.querySelectorAll('.connection');
+                
+                neurons.forEach(neuron => {
+                    neuron.classList.remove('active');
+                    neuron.classList.remove('infinite-active');
+                });
+                
+                connections.forEach(connection => {
+                    connection.style.background = 'linear-gradient(90deg, var(--neon-cyan), transparent)';
+                    connection.style.boxShadow = 'none';
+                    connection.style.opacity = '1';
+                });
+            }
+
+            // Matrix background animation with security constraints
             function initMatrixBackground() {
                 const canvas = document.getElementById('matrixCanvas');
                 const ctx = canvas.getContext('2d');
+                
+                // Security: Validate canvas context
+                if (!ctx) {
+                    console.error('Canvas context not available');
+                    return;
+                }
                 
                 function resizeCanvas() {
                     canvas.width = window.innerWidth;
@@ -991,47 +1187,76 @@
                 resizeCanvas();
                 window.addEventListener('resize', resizeCanvas);
                 
-                const chars = "01010101010101010101010101010101";
-                const charArray = chars.split("");
-                const rainDrops = [];
-                
+                const chars = '01';
+                const charArray = chars.split('');
                 const fontSize = 14;
                 const columns = canvas.width / fontSize;
+                const drops = [];
                 
-                for(let x = 0; x < columns; x++) {
-                    rainDrops[x] = 1;
+                // Security: Initialize with safe values
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = Math.random() * -100;
                 }
                 
                 function drawMatrix() {
-                    ctx.fillStyle = 'rgba(5, 5, 5, 0.04)';
+                    ctx.fillStyle = 'rgba(5, 5, 15, 0.04)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    ctx.fillStyle = '#0F0';
-                    ctx.font = fontSize + 'px monospace';
+                    ctx.fillStyle = 'rgba(0, 243, 255, 0.8)';
+                    ctx.font = `${fontSize}px monospace`;
                     
-                    for(let i = 0; i < rainDrops.length; i++) {
+                    for (let i = 0; i < drops.length; i++) {
                         const text = charArray[Math.floor(Math.random() * charArray.length)];
-                        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                        const x = i * fontSize;
+                        const y = drops[i] * fontSize;
                         
-                        if(rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                            rainDrops[i] = 0;
+                        ctx.fillText(text, x, y);
+                        
+                        if (y > canvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
                         }
-                        rainDrops[i]++;
+                        
+                        drops[i]++;
                     }
                 }
                 
-                setInterval(drawMatrix, 30);
+                // Security: Limit animation frame rate
+                setInterval(drawMatrix, 50);
             }
 
-            // Security: Prevent context menu and text selection
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.addEventListener('selectstart', e => e.preventDefault());
+            // Security: Prevent context menu on neural network
+            networkContainer.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
         });
 
-        // Security: Prevent console access in production
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-            console.log('%cSECURITY WARNING: This browser feature is for developers only.', 'color: red; font-size: 20px;');
+        // NEW: Function to handle iframe loading errors
+        function showIframeFallback(iframe) {
+            iframe.style.display = 'none';
+            document.getElementById('iframeFallback').style.display = 'flex';
         }
+
+        // Security: Additional protection against script injection
+        document.addEventListener('securitypolicyviolation', function(e) {
+            console.warn('CSP Violation:', e);
+        });
+
+        // NEW: Check if iframe loaded successfully after a timeout
+        setTimeout(function() {
+            const iframe = document.querySelector('.preview-iframe');
+            const iframeFallback = document.getElementById('iframeFallback');
+            
+            // If iframe hasn't loaded content after 3 seconds, show fallback
+            if (iframe && iframe.contentWindow && iframe.contentWindow.document && 
+                iframe.contentWindow.document.readyState === 'complete') {
+                // Iframe loaded successfully
+                console.log('Iframe loaded successfully');
+            } else if (iframe && iframeFallback.style.display === 'none') {
+                // Iframe might have security restrictions, show fallback
+                showIframeFallback(iframe);
+            }
+        }, 3000);
     </script>
 </body>
 </html>
