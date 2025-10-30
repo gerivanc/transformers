@@ -26,19 +26,17 @@
     <title>TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</title>
     
     <style>
-        /* CSS Variables for consistent theming */
+        /* CSS Variables for consistent theming - UPDATED COLORS */
         :root {
-            --neon-cyan: #00f3ff;
-            --neon-green: #39ff14;
-            --neon-purple: #bc13fe;
-            --dark-bg: #0a0a0a;
-            --darker-bg: #050505;
-            --card-bg: rgba(10, 20, 30, 0.8);
+            --neon-cyan: #00ffff; /* Updated to match CYBER NEURAL NETWORK */
+            --neon-green: #39ff14; /* Updated to match CYBER NEURAL NETWORK */
+            --neon-orange: #ff6600; /* Updated to match CYBER NEURAL NETWORK */
+            --dark-bg: #0a0a16; /* Updated to match CYBER NEURAL NETWORK */
+            --darker-bg: #050510;
+            --card-bg: rgba(0, 20, 30, 0.85); /* Updated to match CYBER NEURAL NETWORK */
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
             --glow-intensity: 0.8;
-            --vibrant-orange: #ff6600; /* Added vibrant orange from the second file */
-            --normal-green: #39ff14; /* Added normal green without effects */
         }
 
         /* Base reset and security-focused styling */
@@ -59,9 +57,8 @@
             color: var(--text-primary);
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(57, 255, 20, 0.05) 0%, transparent 20%),
-                linear-gradient(45deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 100, 0, 0.05) 0%, transparent 20%);
         }
 
         /* Main container with security constraints */
@@ -96,18 +93,18 @@
                     0 0 5px var(--neon-cyan),
                     0 0 10px var(--neon-cyan),
                     0 0 15px var(--neon-cyan),
-                    0 0 20px var(--neon-purple),
-                    0 0 35px var(--neon-purple),
-                    0 0 40px var(--neon-purple);
+                    0 0 20px var(--neon-green),
+                    0 0 35px var(--neon-green),
+                    0 0 40px var(--neon-green);
             }
             50% {
                 text-shadow: 
                     0 0 2px var(--neon-cyan),
                     0 0 5px var(--neon-cyan),
                     0 0 7px var(--neon-cyan),
-                    0 0 10px var(--neon-purple),
-                    0 0 17px var(--neon-purple),
-                    0 0 20px var(--neon-purple);
+                    0 0 10px var(--neon-green),
+                    0 0 17px var(--neon-green),
+                    0 0 20px var(--neon-green);
             }
         }
 
@@ -128,9 +125,9 @@
             padding: 60px 20px;
             position: relative;
             background: linear-gradient(135deg, 
-                rgba(10, 10, 10, 0.9) 0%, 
-                rgba(5, 5, 5, 0.95) 100%);
-            border-bottom: 2px solid var(--normal-green);
+                rgba(10, 10, 22, 0.9) 0%, 
+                rgba(5, 5, 16, 0.95) 100%);
+            border-bottom: 2px solid var(--neon-green);
             box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
             overflow: hidden;
         }
@@ -140,24 +137,24 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 20px;
-            color: var(--normal-green); /* Changed to normal green without effects */
+            color: var(--neon-green);
         }
 
         .subtitle {
             font-size: clamp(1rem, 2vw, 1.4rem);
-            color: var(--vibrant-orange); /* Changed to vibrant orange */
+            color: var(--neon-orange);
             margin-bottom: 30px;
             line-height: 1.6;
             position: relative;
             z-index: 2;
-            font-weight: bold; /* Added bold font weight */
+            font-weight: bold;
         }
 
         /* Card components with glassmorphism effect */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.2);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
@@ -173,7 +170,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
             transition: left 0.5s ease;
         }
 
@@ -183,7 +180,7 @@
 
         .card:hover {
             border-color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
         }
 
         /* Section headers with cyberpunk style */
@@ -192,8 +189,8 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 25px;
-            color: var(--normal-green); /* Changed to normal green */
-            border-left: 4px solid var(--normal-green); /* Changed to normal green */
+            color: var(--neon-green);
+            border-left: 4px solid var(--neon-green);
             padding-left: 15px;
         }
 
@@ -202,9 +199,9 @@
             position: relative;
             height: 500px;
             background: 
-                radial-gradient(circle at center, rgba(0, 243, 255, 0.1) 0%, transparent 70%),
-                linear-gradient(45deg, rgba(10, 10, 30, 0.8) 0%, rgba(5, 5, 15, 0.9) 100%);
-            border: 2px solid rgba(0, 243, 255, 0.3);
+                radial-gradient(circle at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%),
+                linear-gradient(45deg, rgba(10, 10, 22, 0.8) 0%, rgba(5, 5, 16, 0.9) 100%);
+            border: 2px solid rgba(0, 255, 255, 0.3);
             border-radius: 10px;
             overflow: hidden;
             margin: 30px 0;
@@ -224,19 +221,19 @@
         }
 
         label {
-            color: var(--neon-cyan);
+            color: var(--neon-orange);
             margin-bottom: 10px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Custom range slider */
+        /* Custom range slider - UPDATED to match CYBER NEURAL NETWORK */
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
             height: 8px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--normal-green)); /* Changed to normal green */
+            background: linear-gradient(to right, var(--neon-cyan), var(--neon-orange));
             border-radius: 4px;
             outline: none;
             margin: 10px 0;
@@ -246,19 +243,20 @@
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
-            background: var(--neon-purple);
+            background: #ffffff;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px var(--neon-purple);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
         .range-value {
-            color: var(--normal-green); /* Changed to normal green */
+            color: #ffffff;
             font-weight: bold;
             text-align: right;
+            width: 40px;
         }
 
-        /* Cyberpunk buttons */
+        /* Cyberpunk buttons - UPDATED to match CYBER NEURAL NETWORK */
         .btn-group {
             display: flex;
             gap: 15px;
@@ -267,8 +265,8 @@
         }
 
         button {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
-            color: var(--text-primary);
+            background: linear-gradient(to right, var(--neon-green), var(--neon-cyan));
+            color: var(--dark-bg);
             border: none;
             padding: 15px 30px;
             border-radius: 8px;
@@ -279,7 +277,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
         }
 
         button::before {
@@ -299,16 +297,16 @@
 
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5);
         }
 
-        /* Neural network elements */
+        /* Neural network elements - RESTORED ORIGINAL STRUCTURE */
         .neuron {
             position: absolute;
             width: 25px;
             height: 25px;
             border-radius: 50%;
-            background: radial-gradient(circle, var(--neon-cyan), var(--neon-purple));
+            background: radial-gradient(circle, var(--neon-cyan), var(--neon-green));
             box-shadow: 0 0 15px var(--neon-cyan);
             z-index: 10;
             transition: all 0.3s ease;
@@ -325,8 +323,8 @@
         }
 
         .active {
-            background: radial-gradient(circle, var(--normal-green), #ff0080); /* Changed to normal green */
-            box-shadow: 0 0 20px var(--normal-green); /* Changed to normal green */
+            background: radial-gradient(circle, var(--neon-green), var(--neon-orange));
+            box-shadow: 0 0 20px var(--neon-green);
             animation: pulse 1s infinite;
         }
 
@@ -337,8 +335,8 @@
 
         /* NEW: Infinite animation for continuous neural activity */
         .infinite-active {
-            background: radial-gradient(circle, var(--normal-green), #ff0080);
-            box-shadow: 0 0 20px var(--normal-green);
+            background: radial-gradient(circle, var(--neon-green), var(--neon-orange));
+            box-shadow: 0 0 20px var(--neon-green);
             animation: infinitePulse 2s infinite;
         }
 
@@ -366,11 +364,11 @@
             text-align: center;
             padding: 50px 30px;
             background: linear-gradient(135deg, 
-                rgba(0, 243, 255, 0.1) 0%, 
+                rgba(0, 255, 255, 0.1) 0%, 
                 rgba(57, 255, 20, 0.1) 100%);
             border-radius: 15px;
             margin-top: 40px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.3);
         }
 
         .coming-soon h3 {
@@ -390,10 +388,10 @@
         }
 
         .spec-item {
-            background: rgba(0, 243, 255, 0.05);
+            background: rgba(0, 255, 255, 0.05);
             padding: 20px;
             border-radius: 10px;
-            border-left: 3px solid var(--normal-green); /* Changed to normal green */
+            border-left: 3px solid var(--neon-green);
         }
 
         .spec-item h4 {
@@ -406,16 +404,16 @@
             text-align: center;
             padding: 40px 20px;
             margin-top: 60px;
-            border-top: 2px solid var(--normal-green); /* Changed to normal green */
+            border-top: 2px solid var(--neon-green);
             background: linear-gradient(135deg, 
-                rgba(10, 10, 10, 0.9) 0%, 
-                rgba(5, 5, 5, 0.95) 100%);
+                rgba(10, 10, 22, 0.9) 0%, 
+                rgba(5, 5, 16, 0.95) 100%);
         }
 
         footer p {
             margin: 10px 0;
-            color: #ffffff; /* Changed to white */
-            font-weight: bold; /* Added bold font weight */
+            color: #ffffff;
+            font-weight: bold;
         }
 
         /* Responsive design */
@@ -459,7 +457,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--normal-green), transparent); /* Changed to normal green */
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
             animation: security-scan 3s linear infinite;
             z-index: 1000;
             pointer-events: none;
@@ -513,9 +511,9 @@
         /* CYBER NEURAL NETWORK Section Styles */
         .cyber-neural-section {
             background: linear-gradient(135deg, 
-                rgba(0, 243, 255, 0.05) 0%, 
+                rgba(0, 255, 255, 0.05) 0%, 
                 rgba(57, 255, 20, 0.05) 100%);
-            border: 1px solid rgba(0, 243, 255, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 15px;
             padding: 40px;
             margin: 40px 0;
@@ -539,7 +537,7 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 20px;
-            color: var(--normal-green); /* Changed to normal green */
+            color: var(--neon-green);
             text-align: center;
         }
 
@@ -559,17 +557,17 @@
         }
 
         .cyber-feature {
-            background: rgba(0, 243, 255, 0.08);
+            background: rgba(0, 255, 255, 0.08);
             padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.2);
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .cyber-feature:hover {
             border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
             transform: translateY(-5px);
         }
 
@@ -588,10 +586,10 @@
         .cyber-visual-preview {
             height: 300px;
             background: 
-                radial-gradient(circle at 30% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 30% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 70% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
-                linear-gradient(45deg, rgba(10, 10, 30, 0.9) 0%, rgba(5, 5, 15, 0.95) 100%);
-            border: 2px solid rgba(0, 243, 255, 0.3);
+                linear-gradient(45deg, rgba(10, 10, 22, 0.9) 0%, rgba(5, 5, 16, 0.95) 100%);
+            border: 2px solid rgba(0, 255, 255, 0.3);
             border-radius: 10px;
             margin: 30px 0;
             position: relative;
@@ -637,7 +635,7 @@
         .preview-iframe {
             width: 25cm;
             height: 21cm;
-            border: 2px solid var(--normal-green);
+            border: 2px solid var(--neon-green);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
             background-color: var(--dark-bg);
@@ -645,15 +643,15 @@
 
         /* NEW: Fallback styling for iframe */
         .iframe-fallback {
-            width: 21cm;
-            height: 15cm;
-            border: 2px solid var(--normal-green);
+            width: 25cm;
+            height: 21cm;
+            border: 2px solid var(--neon-green);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
             background: 
-                radial-gradient(circle at 30% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 30% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 70% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
-                linear-gradient(45deg, rgba(10, 10, 30, 0.9) 0%, rgba(5, 5, 15, 0.95) 100%);
+                linear-gradient(45deg, rgba(10, 10, 22, 0.9) 0%, rgba(5, 5, 16, 0.95) 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -683,21 +681,21 @@
         @media (max-width: 1200px) {
             .preview-iframe, .iframe-fallback {
                 width: 90%;
-                height: 700px;
+                height: 900px;
             }
         }
 
         @media (max-width: 768px) {
             .preview-iframe, .iframe-fallback {
                 width: 95%;
-                height: 700px;
+                height: 800px;
             }
         }
 
         @media (max-width: 480px) {
             .preview-iframe, .iframe-fallback {
                 width: 100%;
-                height: 400px;
+                height: 750px;
             }
             
             .iframe-fallback h3 {
@@ -883,7 +881,7 @@
             // Initialize matrix background
             initMatrixBackground();
             
-            // Neural network visualization system
+            // Neural network visualization system - RESTORED ORIGINAL STRUCTURE
             const networkContainer = document.getElementById('network-container');
             const inputNeuronsSlider = document.getElementById('input-neurons');
             const hiddenLayersSlider = document.getElementById('hidden-layers');
@@ -897,6 +895,7 @@
             // NEW: Variables to track animation state
             let isInfiniteAnimationActive = false;
             let infiniteAnimationInterval = null;
+            let activationTimeout = null; // NEW: Track activation timeout
 
             // Security: Input validation and sanitization
             function sanitizeInput(value, min, max, defaultValue) {
@@ -936,7 +935,7 @@
                 outputNeurons: 2
             };
 
-            // Initialize neural network visualization
+            // Initialize neural network visualization - RESTORED ORIGINAL STRUCTURE
             createNeuralNetwork(networkConfig);
 
             // Secure event listeners with input validation
@@ -948,18 +947,36 @@
                     outputNeurons: sanitizeInput(outputNeuronsSlider.value, 1, 5, 2)
                 };
                 createNeuralNetwork(networkConfig);
+                // NEW: Stop any running animations when updating network
+                resetActivation();
+                if (isInfiniteAnimationActive) {
+                    stopInfiniteActivation();
+                    simulateInfiniteButton.textContent = "START INFINITE ACTIVATION";
+                }
             });
 
             simulateButton.addEventListener('click', function() {
+                // NEW: Stop infinite animation if active
+                if (isInfiniteAnimationActive) {
+                    stopInfiniteActivation();
+                    simulateInfiniteButton.textContent = "START INFINITE ACTIVATION";
+                }
                 simulateActivation();
             });
 
-            // NEW: Infinite activation simulation
+            // NEW: Infinite activation simulation - FIXED LOGIC
             simulateInfiniteButton.addEventListener('click', function() {
                 if (isInfiniteAnimationActive) {
                     stopInfiniteActivation();
                     this.textContent = "START INFINITE ACTIVATION";
                 } else {
+                    // NEW: Clear any pending activation timeout
+                    if (activationTimeout) {
+                        clearTimeout(activationTimeout);
+                        activationTimeout = null;
+                    }
+                    // NEW: Reset any active animations first
+                    resetActivation();
                     startInfiniteActivation();
                     this.textContent = "STOP INFINITE ACTIVATION";
                 }
@@ -974,7 +991,7 @@
                 }
             });
 
-            // Neural network creation with security bounds
+            // Neural network creation with security bounds - RESTORED ORIGINAL STRUCTURE
             function createNeuralNetwork(config) {
                 // Security: Clear container safely
                 while (networkContainer.firstChild) {
@@ -1083,16 +1100,17 @@
                 
                 // Security: Limit animation duration
                 neurons.forEach(neuron => {
+                    neuron.classList.remove('infinite-active'); // NEW: Clear infinite animation first
                     neuron.classList.add('active');
                 });
                 
                 connections.forEach(connection => {
-                    connection.style.background = 'linear-gradient(90deg, var(--normal-green), var(--neon-purple))';
-                    connection.style.boxShadow = '0 0 10px var(--normal-green)';
+                    connection.style.background = 'linear-gradient(90deg, var(--neon-green), var(--neon-orange))';
+                    connection.style.boxShadow = '0 0 10px var(--neon-green)';
                 });
                 
                 // Security: Clear animation after safe duration
-                setTimeout(() => {
+                activationTimeout = setTimeout(() => { // NEW: Track this timeout
                     neurons.forEach(neuron => {
                         neuron.classList.remove('active');
                     });
@@ -1104,7 +1122,7 @@
                 }, 3000);
             }
 
-            // NEW: Infinite activation function
+            // NEW: Infinite activation function - FIXED LOGIC
             function startInfiniteActivation() {
                 isInfiniteAnimationActive = true;
                 const neurons = document.querySelectorAll('.neuron');
@@ -1112,13 +1130,13 @@
                 
                 // Clear any existing animations first
                 neurons.forEach(neuron => {
-                    neuron.classList.remove('active');
+                    neuron.classList.remove('active'); // NEW: Remove regular activation
                     neuron.classList.add('infinite-active');
                 });
                 
                 connections.forEach(connection => {
-                    connection.style.background = 'linear-gradient(90deg, var(--normal-green), var(--neon-purple))';
-                    connection.style.boxShadow = '0 0 10px var(--normal-green)';
+                    connection.style.background = 'linear-gradient(90deg, var(--neon-green), var(--neon-orange))';
+                    connection.style.boxShadow = '0 0 10px var(--neon-green)';
                 });
                 
                 // Create a pulsing effect for connections
@@ -1130,7 +1148,7 @@
                 }, 500);
             }
 
-            // NEW: Stop infinite activation
+            // NEW: Stop infinite activation - FIXED LOGIC
             function stopInfiniteActivation() {
                 isInfiniteAnimationActive = false;
                 if (infiniteAnimationInterval) {
@@ -1153,6 +1171,12 @@
             }
 
             function resetActivation() {
+                // NEW: Clear any pending timeout
+                if (activationTimeout) {
+                    clearTimeout(activationTimeout);
+                    activationTimeout = null;
+                }
+                
                 const neurons = document.querySelectorAll('.neuron');
                 const connections = document.querySelectorAll('.connection');
                 
@@ -1199,10 +1223,10 @@
                 }
                 
                 function drawMatrix() {
-                    ctx.fillStyle = 'rgba(5, 5, 15, 0.04)';
+                    ctx.fillStyle = 'rgba(5, 5, 16, 0.04)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    ctx.fillStyle = 'rgba(0, 243, 255, 0.8)';
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
                     ctx.font = `${fontSize}px monospace`;
                     
                     for (let i = 0; i < drops.length; i++) {
