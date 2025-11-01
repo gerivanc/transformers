@@ -1,4 +1,4 @@
-# 🤖 Cyber Neural Network Visualization Calculation Methodology
+# 🤖 Cyber Neural Network Visualization - Calculation Methodology
 
 ## 🧠 Introduction to Cyber Neural Network Architecture
 
