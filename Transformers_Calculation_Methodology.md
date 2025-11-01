@@ -1,4 +1,4 @@
-# 🧠 Transformers Interactive Visualizer Calculation Methodology
+# 🧠 Transformers Neural Network — Interactive Visualizer - Calculation Methodology
 
 > **Live Demo:** [https://transformers.gerivan.me](https://transformers.gerivan.me)  
 > **Repository:** [🧠 Transformers Interactive Visualizer](https://github.com/gerivanc/transformers)
