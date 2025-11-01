@@ -1,8 +1,8 @@
-# 🤖 Transformers Neural Network Calculation Methodology
+# 🤖 Cyber Neural Network Visualization Calculation Methodology
 
-## 🧠 Introduction to Neural Network Architecture
+## 🧠 Introduction to Cyber Neural Network Architecture
 
-The **Transformers Interactive Neural Network Visualizer** implements a sophisticated dual-mode visualization system that demonstrates artificial neural network principles through interactive web technologies. This document details the mathematical foundations, visualization algorithms, and implementation methodologies behind both visualization modes.
+The **Cyber Neural Network Visualizer** implements a sophisticated dual-mode visualization system that demonstrates artificial neural network principles through interactive web technologies. This document details the mathematical foundations, visualization algorithms, and implementation methodologies behind both visualization modes.
 
 ---
 
