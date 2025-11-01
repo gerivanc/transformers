@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="robots" content="noarchive"/>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    img-src 'self' data:;
+    font-src 'self' https://cdn.jsdelivr.net;
+    connect-src 'none';
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'none';
+    upgrade-insecure-requests;
+  ">
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="Referrer-Policy" content="no-referrer"/>
+  <meta name="format-detection" content="telephone=no"/>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/favicon-256x256.png" sizes="256x256">
+	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/web-app-manifest-784x789.png">
+	<link rel="shortcut icon" href="https://transformers.gerivan.me/web-app-manifest-784x789.png">
+	<link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
+	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
+
+	<!-- Manifest -->
+	<link rel="manifest" href="/site.webmanifest">
+
+    <!-- Meta tags for PWA -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">  
+  <title>Transformers Neural Network — Interactive Visualizer</title>
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<link rel="manifest" href="manifest.json">  
+
+  <!-- Three.js for 3D visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+  
+  <link href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --card: #111128;
+      --accent: #00d4ff;
+      --success: #00ff88;
+      --danger: #ff6b6b;
+      --warning: #f9ca24;
+      --grad: #ff4d4d;
+      --head-colors: #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #6c5ce7, #a29bfe, #fd79a8, #fdcb6e;
+    }
+    
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin:0; 
+      padding:0; 
+    }
+    
+    body {
+      font-family: 'Fira Code', monospace;
+      background: var(--bg);
+      color: #e0e0ff;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      padding: 10px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+      position: relative;
+      border: 1px solid var(--accent);
+    }
+    
+    h1 {
+      text-align: center;
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      opacity: 0.8;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      margin-bottom: 20px;
+    }
+
+    /* Controls */
+    .controls, .mode-selector {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      background: #1e1e3f;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+    }
+    
+    button:hover { 
+      background: var(--accent); 
+      color: #000; 
+      transform: translateY(-2px); 
+    }
+    
+    button.active { 
+      background: var(--success); 
+      color: #000; 
+      box-shadow: 0 0 15px var(--success); 
+    }
+    
+    button.danger { 
+      border-color: var(--danger); 
+      color: var(--danger); 
+    }
+    
+    button.danger:hover { 
+      background: var(--danger); 
+      color: #000; 
+    }
+
+    /* Data selection */
+    .data-selector {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    
+    .data-btn {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      background: #1e1e3f;
+      padding: 10px 15px;
+      border-radius: 8px;
+      min-width: 100px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Layers */
+    .layers-container {
+      position: relative;
+      margin: 30px 0;
+      min-height: 400px;
+      overflow: auto;
+    }
+    
+    .layers {
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      min-height: 400px;
+      padding: 10px;
+    }
+    
+    .layer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 150px;
+      position: relative;
+    }
+    
+    .layer-title {
+      font-size: 14px;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .token-cluster {
+      position: relative;
+      width: 100%;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .token {
+      width: 60px;
+      height: 60px;
+      background: #1e1e3f;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(0,212,255,0.4);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .token:hover { 
+      transform: scale(1.2); 
+      z-index: 20; 
+    }
+    
+    .token.active { 
+      background: var(--success); 
+      color: #000; 
+    }
+    
+    .token.grad { 
+      border-color: var(--grad); 
+      box-shadow: 0 0 20px var(--grad); 
+    }
+    
+    .token.attention-high { 
+      border-color: var(--warning); 
+      box-shadow: 0 0 15px var(--warning); 
+    }
+
+    /* SVG & Pulses */
+    svg { 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      pointer-events: none; 
+      z-index: 5; 
+    }
+    
+    .pulse, .grad-pulse {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 15;
+    }
+    
+    .pulse { 
+      background: var(--success); 
+      box-shadow: 0 0 15px var(--success); 
+      animation: pulse 1.5s infinite; 
+    }
+    
+    .grad-pulse { 
+      background: var(--grad); 
+      box-shadow: 0 0 15px var(--grad); 
+      animation: pulse-grad 1.5s infinite; 
+    }
+    
+    @keyframes pulse { 
+      0% { transform: scale(1); opacity: 1; } 
+      100% { transform: scale(4); opacity: 0; } 
+    }
+    
+    @keyframes pulse-grad { 
+      0% { transform: scale(1); opacity: 1; } 
+      100% { transform: scale(5); opacity: 0; } 
+    }
+
+    /* 3D Visualization */
+    .viz-3d-container {
+      width: 100%;
+      height: 300px;
+      margin: 20px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0f0f1f;
+      display: none;
+    }
+    
+    .viz-3d-container.active {
+      display: block;
+    }
+
+    /* Info Panel */
+    .info-panel {
+      background: #1a1a2e;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      border: 1px solid #333;
+    }
+    
+    .attention-matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+    
+    .attention-cell {
+      background: #1e1e3f;
+      padding: 5px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .layers {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+      
+      .layer {
+        width: 100%;
+      }
+      
+      .token-cluster {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-height: auto;
+      }
+      
+      .token {
+        width: 50px;
+        height: 50px;
+        font-size: 0.8rem;
+      }
+      
+      .controls, .mode-selector, .data-selector {
+        gap: 5px;
+      }
+      
+      button {
+        padding: 8px 12px;
+      }
+      
+      .stats {
+        gap: 10px;
+      }
+      
+      .stat {
+        min-width: 80px;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+
+  <div class="container">
+    <h1>🧠 Transformers Neural Network</h1>
+    <p class="subtitle">Interactive Visualization • Live Training • GPT vs T5</p>
+
+    <div class="mode-selector">
+      <button class="mode-btn active" id="mode-gpt">GPT (Decoder-only)</button>
+      <button class="mode-btn" id="mode-t5">T5 (Encoder-Decoder)</button>
+      <button class="mode-btn" id="toggle-3d">3D Visualization</button>
+    </div>
+
+    <div class="data-selector">
+      <button class="data-btn active" data-dataset="0">I love AI</button>
+      <button class="data-btn" data-dataset="1">Hello world</button>
+      <button class="data-btn" data-dataset="2">Machine learning</button>
+      <button class="data-btn" data-dataset="3">Neural networks</button>
+    </div>
+
+    <div class="controls">
+      <button id="btn-train" class="active">Train</button>
+      <button id="btn-pause">Pause</button>
+      <button id="btn-forward">Forward</button>
+      <button id="btn-backward" class="danger">Backward</button>
+      <button id="btn-reset">Reset</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">Loss: <span id="loss">0.000</span></div>
+      <div class="stat">Epoch: <span id="epoch">0</span></div>
+      <div class="stat">Mode: <span id="mode">GPT</span></div>
+      <div class="stat">Heads: <span id="heads">4</span></div>
+    </div>
+
+    <div class="viz-3d-container" id="viz-3d"></div>
+
+    <div class="layers-container">
+      <div class="layers" id="layers">
+        <div class="layer" id="input-layer">
+          <div class="layer-title">Input</div>
+          <div class="token-cluster"></div>
+        </div>
+        <div class="layer" id="encoder-layer">
+          <div class="layer-title">Encoder</div>
+          <div class="token-cluster"></div>
+        </div>
+        <div class="layer" id="decoder-layer">
+          <div class="layer-title">Decoder</div>
+          <div class="token-cluster"></div>
+        </div>
+        <div class="layer" id="output-layer">
+          <div class="layer-title">Output</div>
+          <div class="token-cluster"></div>
+        </div>
+      </div>
+
+      <svg id="attention-svg"></svg>
+      <svg id="grad-svg"></svg>
+    </div>
+
+    <div class="info-panel" id="info">
+      Click on a token to inspect multi-head attention and gradients.
+      <div class="attention-matrix" id="attention-matrix"></div>
+    </div>
+  </div>
+
+  <!-- Protection Scripts -->
+  <script>
+    // Block F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I, etc.
+    document.onkeydown = function(e) {
+      if (
+        e.keyCode == 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) ||
+        (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
+        (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0))
+      ) return false;
+    };
+
+    // Block context menu
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Block selection
+    document.onselectstart = () => false;
+
+    // Block DevTools via size detection
+    setInterval(() => {
+      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+        document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:100px;">Access denied.</h1>';
+      }
+    }, 1000);
+  </script>
+
+  <!-- Transformer Logic -->
+  <script>
+    // Multiple datasets for variety
+    const datasets = [
+      {
+        input: ["<BOS>", "I", "love", "AI"],
+        target: ["I", "love", "AI", "."],
+        vocab: { "<BOS>": 0, "I": 1, "love": 2, "AI": 3, ".": 4 }
+      },
+      {
+        input: ["<BOS>", "Hello", "world"],
+        target: ["Hello", "world", "!"],
+        vocab: { "<BOS>": 0, "Hello": 1, "world": 2, "!": 3 }
+      },
+      {
+        input: ["<BOS>", "Machine", "learning"],
+        target: ["Machine", "learning", "models"],
+        vocab: { "<BOS>": 0, "Machine": 1, "learning": 2, "models": 3 }
+      },
+      {
+        input: ["<BOS>", "Neural", "networks"],
+        target: ["Neural", "networks", "transform"],
+        vocab: { "<BOS>": 0, "Neural": 1, "networks": 2, "transform": 3 }
+      }
+    ];
+    
+    let currentDataset = 0;
+    const d_model = 32;
+    const n_heads = 4;
+    let model, optimizer;
+    let isGPT = true;
+    let isTraining = false;
+    let epoch = 0;
+    let show3D = false;
+    let scene, camera, renderer, controls;
+
+    // DOM Elements
+    const svgAttn = document.getElementById('attention-svg');
+    const svgGrad = document.getElementById('grad-svg');
+    const info = document.getElementById('info');
+    const lossEl = document.getElementById('loss');
+    const epochEl = document.getElementById('epoch');
+    const modeEl = document.getElementById('mode');
+    const headsEl = document.getElementById('heads');
+    const attentionMatrix = document.getElementById('attention-matrix');
+    const viz3dContainer = document.getElementById('viz-3d');
+
+    // Initialize 3D visualization
+    function init3DVisualization() {
+      if (!show3D) return;
+      
+      // Set up scene
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0a1a);
+      
+      // Set up camera
+      camera = new THREE.PerspectiveCamera(75, viz3dContainer.clientWidth / viz3dContainer.clientHeight, 0.1, 1000);
+      camera.position.z = 5;
+      
+      // Set up renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(viz3dContainer.clientWidth, viz3dContainer.clientHeight);
+      viz3dContainer.appendChild(renderer.domElement);
+      
+      // Add controls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      
+      // Add some sample geometry to represent tokens
+      const geometry = new THREE.SphereGeometry(0.2, 16, 16);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00d4ff });
+      
+      // Create tokens in 3D space
+      const tokens = [];
+      for (let i = 0; i < 8; i++) {
+        const token = new THREE.Mesh(geometry, material);
+        token.position.x = (i % 4) * 0.6 - 0.9;
+        token.position.y = Math.floor(i / 4) * 0.6 - 0.3;
+        scene.add(token);
+        tokens.push(token);
+      }
+      
+      // Add connections between tokens
+      const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff88 });
+      
+      for (let i = 0; i < tokens.length; i++) {
+        for (let j = i + 1; j < tokens.length; j++) {
+          const points = [];
+          points.push(tokens[i].position);
+          points.push(tokens[j].position);
+          
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          const line = new THREE.Line(geometry, lineMaterial);
+          scene.add(line);
+        }
+      }
+      
+      // Add lights
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      scene.add(ambientLight);
+      
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+      
+      // Animation loop
+      function animate() {
+        if (!show3D) return;
+        
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      
+      animate();
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        if (!show3D) return;
+        
+        camera.aspect = viz3dContainer.clientWidth / viz3dContainer.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(viz3dContainer.clientWidth, viz3dContainer.clientHeight);
+      });
+    }
+
+    // Create token element
+    function createToken(text, layerId, idx) {
+      const div = document.createElement('div');
+      div.className = 'token';
+      div.textContent = text;
+      div.dataset.word = text;
+      div.dataset.layer = layerId;
+      div.dataset.idx = idx;
+      div.onclick = () => selectToken(text);
+      document.querySelector(`#${layerId} .token-cluster`).appendChild(div);
+      return div;
+    }
+
+    // Clear all layers
+    function clearLayers() {
+      document.querySelectorAll('.token-cluster').forEach(c => c.innerHTML = '');
+      svgAttn.innerHTML = '';
+      svgGrad.innerHTML = '';
+    }
+
+    // Render architecture based on current mode
+    function renderArchitecture() {
+      clearLayers();
+      const dataset = datasets[currentDataset];
+      const inputs = isGPT ? dataset.input : dataset.input;
+      const decInputs = isGPT ? dataset.input.slice(0, -1) : dataset.target.slice(0, -1);
+
+      inputs.forEach((t, i) => createToken(t, 'input-layer', i));
+      if (!isGPT) inputs.forEach((t, i) => createToken(t, 'encoder-layer', i));
+      decInputs.forEach((t, i) => createToken(t, 'decoder-layer', i));
+      dataset.target.forEach((t, i) => createToken(t, 'output-layer', i));
+      
+      // Update attention matrix
+      updateAttentionMatrix();
+    }
+
+    // Update attention matrix visualization
+    function updateAttentionMatrix() {
+      attentionMatrix.innerHTML = '';
+      const dataset = datasets[currentDataset];
+      const tokens = dataset.input;
+      
+      // Create header row
+      const headerRow = document.createElement('div');
+      headerRow.className = 'attention-cell';
+      headerRow.textContent = '';
+      headerRow.style.gridColumn = '1';
+      attentionMatrix.appendChild(headerRow);
+      
+      tokens.forEach(token => {
+        const header = document.createElement('div');
+        header.className = 'attention-cell';
+        header.textContent = token;
+        attentionMatrix.appendChild(header);
+      });
+      
+      // Create matrix rows
+      tokens.forEach((token, rowIdx) => {
+        const rowHeader = document.createElement('div');
+        rowHeader.className = 'attention-cell';
+        rowHeader.textContent = token;
+        rowHeader.style.gridRow = `${rowIdx + 2}`;
+        attentionMatrix.appendChild(rowHeader);
+        
+        tokens.forEach((_, colIdx) => {
+          const cell = document.createElement('div');
+          cell.className = 'attention-cell';
+          // Simulate attention weights (in a real implementation, these would come from the model)
+          const attentionValue = Math.random().toFixed(2);
+          cell.textContent = attentionValue;
+          cell.style.opacity = attentionValue;
+          cell.style.gridRow = `${rowIdx + 2}`;
+          cell.style.gridColumn = `${colIdx + 2}`;
+          attentionMatrix.appendChild(cell);
+        });
+      });
+    }
+
+    // Forward pass animation
+    function forwardPass() {
+      const path = isGPT ? ['input-layer', 'decoder-layer', 'output-layer'] : ['encoder-layer', 'decoder-layer', 'output-layer'];
+      path.forEach((layer, i) => {
+        setTimeout(() => {
+          document.querySelectorAll(`#${layer} .token`).forEach(t => {
+            const pulse = document.createElement('div');
+            pulse.className = 'pulse';
+            const r = t.getBoundingClientRect();
+            const c = document.querySelector('.container').getBoundingClientRect();
+            pulse.style.left = (r.left - c.left + 30 - 4) + 'px';
+            pulse.style.top = (r.top - c.top + 30 - 4) + 'px';
+            document.body.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 1500);
+          });
+        }, i * 800);
+      });
+    }
+
+    // Backward pass animation
+    function backwardPass() {
+      const path = isGPT ? ['output-layer', 'decoder-layer', 'input-layer'] : ['output-layer', 'decoder-layer', 'encoder-layer', 'input-layer'];
+      path.forEach((layer, i) => {
+        setTimeout(() => {
+          document.querySelectorAll(`#${layer} .token`).forEach(t => {
+            t.classList.add('grad');
+            const pulse = document.createElement('div');
+            pulse.className = 'grad-pulse';
+            const r = t.getBoundingClientRect();
+            const c = document.querySelector('.container').getBoundingClientRect();
+            pulse.style.left = (r.left - c.left + 30 - 4) + 'px';
+            pulse.style.top = (r.top - c.top + 30 - 4) + 'px';
+            document.body.appendChild(pulse);
+            setTimeout(() => { 
+              pulse.remove(); 
+              t.classList.remove('grad'); 
+            }, 1500);
+          });
+        }, i * 600);
+      });
+    }
+
+    // Initialize model
+    async function initModel() {
+      const vocabSize = Object.keys(datasets[currentDataset].vocab).length;
+      model = tf.sequential();
+      model.add(tf.layers.embedding({ 
+        inputDim: vocabSize, 
+        outputDim: d_model,
+        inputLength: datasets[currentDataset].input.length
+      }));
+      model.add(tf.layers.dense({ units: d_model, activation: 'relu' }));
+      model.add(tf.layers.dense({ units: vocabSize, activation: 'softmax' }));
+      model.compile({ 
+        optimizer: tf.train.adam(0.001), 
+        loss: 'sparseCategoricalCrossentropy',
+        metrics: ['accuracy']
+      });
+    }
+
+    // Training step
+    async function trainStep() {
+      if (!isTraining) return;
+      
+      const dataset = datasets[currentDataset];
+      const xs = tf.tensor2d([dataset.input.map(w => dataset.vocab[w])], [1, dataset.input.length]);
+      const ys = tf.tensor2d([dataset.target.map(w => dataset.vocab[w])], [1, dataset.target.length]);
+      
+      const h = await model.fit(xs, ys, { epochs: 1, verbose: 0 });
+      lossEl.textContent = h.history.loss[0].toFixed(4);
+      epoch++; 
+      epochEl.textContent = epoch;
+      
+      xs.dispose(); 
+      ys.dispose();
+      requestAnimationFrame(trainStep);
+    }
+
+    // Select token for inspection
+    function selectToken(word) {
+      document.querySelectorAll('.token').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll(`[data-word="${word}"]`).forEach(t => t.classList.add('active'));
+      
+      // Highlight tokens with high attention to selected token
+      document.querySelectorAll('.token').forEach(t => {
+        if (Math.random() > 0.7) { // Simulate attention
+          t.classList.add('attention-high');
+          setTimeout(() => t.classList.remove('attention-high'), 2000);
+        }
+      });
+      
+      info.innerHTML = `Token: <strong>${word}</strong> — Attention weights and gradients active.`;
+    }
+
+    // Event listeners
+    document.getElementById('mode-gpt').onclick = () => { 
+      isGPT = true; 
+      modeEl.textContent = "GPT"; 
+      renderArchitecture(); 
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('mode-gpt').classList.add('active');
+    };
+    
+    document.getElementById('mode-t5').onclick = () => { 
+      isGPT = false; 
+      modeEl.textContent = "T5"; 
+      renderArchitecture(); 
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('mode-t5').classList.add('active');
+    };
+    
+    document.getElementById('toggle-3d').onclick = () => {
+      show3D = !show3D;
+      viz3dContainer.classList.toggle('active', show3D);
+      if (show3D) {
+        init3DVisualization();
+      } else {
+        if (renderer) {
+          viz3dContainer.innerHTML = '';
+        }
+      }
+    };
+    
+    document.getElementById('btn-train').onclick = () => { 
+      isTraining = true; 
+      trainStep(); 
+    };
+    
+    document.getElementById('btn-pause').onclick = () => { 
+      isTraining = false; 
+    };
+    
+    document.getElementById('btn-forward').onclick = forwardPass;
+    document.getElementById('btn-backward').onclick = backwardPass;
+    
+    document.getElementById('btn-reset').onclick = () => { 
+      epoch = 0; 
+      lossEl.textContent = "0.000"; 
+      epochEl.textContent = "0";
+      initModel().then(renderArchitecture); 
+    };
+    
+    // Dataset selection
+    document.querySelectorAll('.data-btn').forEach(btn => {
+      btn.onclick = function() {
+        currentDataset = parseInt(this.dataset.dataset);
+        document.querySelectorAll('.data-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        initModel().then(renderArchitecture);
+      };
+    });
+
+    // Initialize
+    initModel().then(() => {
+      renderArchitecture();
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      const rect = document.getElementById('layers').getBoundingClientRect();
+      svgAttn.setAttribute('viewBox', `0 0 ${rect.width + 100} ${rect.height + 200}`);
+      svgGrad.setAttribute('viewBox', `0 0 ${rect.width + 100} ${rect.height + 200}`);
+    });
+  </script>
+</body>
+</html>
