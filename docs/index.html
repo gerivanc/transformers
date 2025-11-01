@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="strict-origin">
     <meta name="robots" content="index, follow">
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com; 
+                   img-src 'self' data: https://*.githubusercontent.com https://img.shields.io https://komarev.com https://github-readme-activity-graph.vercel.app https://nirzak-streak-stats.vercel.app https://github-readme-stats.vercel.app https://github-profile-summary-cards.vercel.app https://vercel.app https://vercel.live;
+                   frame-src 'self' https://transformers.gerivan.me https://*.githubusercontent.com;">
 	
 	<!-- Favicon -->
 	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/web-app-manifest-784x910.png" sizes="784x910">
@@ -23,7 +29,13 @@
     <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://transformers.gerivan.me">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
+    <!-- Meta tags for PWA -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">	
     <title>TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     
     <style>
         /* CSS Variables for consistent theming - UPDATED COLORS */
@@ -372,7 +384,7 @@
         }
 
         .coming-soon h3 {
-            font-size: 2rem;
+            font-size: 3rem;
             margin-bottom: 20px;
             color: var(--neon-cyan);
             text-transform: uppercase;
@@ -543,7 +555,7 @@
 
         .cyber-neural-subtitle {
             font-size: clamp(1rem, 2vw, 1.2rem);
-            color: var(--text-secondary);
+            color: var(--text-primary);
             text-align: center;
             margin-bottom: 30px;
             line-height: 1.6;
@@ -578,7 +590,7 @@
         }
 
         .cyber-feature p {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             font-size: 0.9rem;
             line-height: 1.5;
         }
@@ -731,14 +743,14 @@
             
             <div class="coming-soon">
                 <h3>COMING SOON</h3>
-                <p>Advanced features under development include real-time training simulations, multiple activation functions (ReLU, Sigmoid, Tanh, Softmax), and dynamic input data visualization with TensorFlow.js integration.</p>
+            <p class="justified-text">Advanced features under development include real-time training simulations, multiple activation functions (ReLU, Sigmoid, Tanh, Softmax), and dynamic input data visualization with TensorFlow.js integration.</p>
             </div>
         </section>
 
         <!-- CYBER NEURAL NETWORK Section -->
         <section class="cyber-neural-section">
             <h2 class="cyber-neural-title">CYBER NEURAL NETWORK</h2>
-            <p class="cyber-neural-subtitle">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
+            <p class="cyber-neural-subtitle" "justified-text">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
             
             <!-- NEW: Iframe preview of the neural network visualization with fallback -->
             <div class="iframe-container">
@@ -772,19 +784,19 @@
             <div class="cyber-neural-features">
                 <div class="cyber-feature">
                     <h4>REAL-TIME INTERACTION</h4>
-                    <p>Manipulate nodes and connections in real-time with intuitive touch and mouse controls</p>
+					<p class="justified-text">Manipulate nodes and connections in real-time with intuitive touch and mouse controls</p>
                 </div>
                 <div class="cyber-feature">
                     <h4>DYNAMIC VISUALIZATION</h4>
-                    <p>Watch as neural connections pulse and glow with configurable intensity and speed</p>
+					<p class="justified-text">Watch as neural connections pulse and glow with configurable intensity and speed</p>
                 </div>
                 <div class="cyber-feature">
                     <h4>ADAPTIVE NETWORK</h4>
-                    <p>Nodes automatically adjust their behavior based on proximity and interaction patterns</p>
+					<p class="justified-text">Nodes automatically adjust their behavior based on proximity and interaction patterns</p>
                 </div>
                 <div class="cyber-feature">
                     <h4>CYBER SECURITY</h4>
-                    <p>Built with advanced security measures and protection against malicious interactions</p>
+					<p class="justified-text">Built with advanced security measures and protection against malicious interactions</p>
                 </div>
             </div>
         </section>
@@ -836,19 +848,19 @@
             <div class="specs-grid">
                 <div class="spec-item">
                     <h4>ARCHITECTURE OVERVIEW</h4>
-                    <p>Multi-layer perceptron with configurable hidden layers, real-time forward propagation visualization, and interactive parameter adjustment.</p>
+					<p class="justified-text">Multi-layer perceptron with configurable hidden layers, real-time forward propagation visualization, and interactive parameter adjustment.</p>
                 </div>
                 <div class="spec-item">
                     <h4>PERFORMANCE METRICS</h4>
-                    <p>GPU-accelerated rendering, 60fps visualization, support for networks up to 10,000 parameters, mobile-optimized touch interactions.</p>
+					<p class="justified-text">GPU-accelerated rendering, 60fps visualization, support for networks up to 10,000 parameters, mobile-optimized touch interactions.</p>
                 </div>
                 <div class="spec-item">
                     <h4>SECURITY FEATURES</h4>
-                    <p>Content Security Policy enforced, XSS protection, clickjacking prevention, secure random number generation for weights initialization.</p>
+					<p class="justified-text">Content Security Policy enforced, XSS protection, clickjacking prevention, secure random number generation for weights initialization.</p>
                 </div>
                 <div class="spec-item">
                     <h4>COMPATIBILITY MATRIX</h4>
-                    <p>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+. Mobile: iOS 14+, Android 10+. WebGL 2.0 required for advanced rendering.</p>
+					<p class="justified-text">>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+. Mobile: iOS 14+, Android 10+. WebGL 2.0 required for advanced rendering.</p>
                 </div>
             </div>
         </section>
