@@ -715,9 +715,9 @@
                 font-size: 1.2rem;
             }
         }
-    </style>
-</head>
-<body>
+		</style>
+	</head>
+	<body>
     <!-- Security scan animation -->
     <div class="security-scan"></div>
     
@@ -801,6 +801,70 @@
                 </div>
             </div>
         </section>
+
+		<!-- TRANSFORMERS INTERACTIVE VISUALIZER Section -->
+		<section class="cyber-neural-section">
+			<h2 class="cyber-neural-title">TRANSFORMERS INTERACTIVE VISUALIZER</h2>
+			<p class="cyber-neural-subtitle justified-text">
+				Advanced visualization of Transformer architectures with real-time training, multi-head attention, 
+				and gradient flow. Experience GPT vs T5 models in action with TensorFlow.js.
+			</p>
+			
+			<!-- Interactive Preview Container -->
+			<div class="iframe-container">
+				<iframe src="https://transformers.gerivan.me/transformers.html" 
+						class="preview-iframe" 
+						title="Transformers Interactive Visualizer"
+						allowfullscreen
+						onerror="showTransformersFallback(this)">
+				</iframe>
+				<!-- Fallback content -->
+				<div class="iframe-fallback" id="transformersFallback" style="display: none;">
+					<h3>TRANSFORMERS VISUALIZER PREVIEW</h3>
+					<p>Interactive neural network visualization could not be loaded directly.</p>
+					<div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+						<button onclick="window.open('https://transformers.gerivan.me/transformers.html', '_blank')">
+							OPEN VISUALIZER
+						</button>
+						<button onclick="window.open('https://github.com/gerivanc/transformers', '_blank')">
+							VIEW SOURCE CODE
+						</button>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Features Grid -->
+			<div class="cyber-neural-features">
+				<div class="cyber-feature">
+					<h4>REAL-TIME TRAINING</h4>
+					<p class="justified-text">Watch live training with TensorFlow.js, observe loss decrease and weight adjustments dynamically with animated forward/backward passes.</p>
+				</div>
+				<div class="cyber-feature">
+					<h4>GPT vs T5 ARCHITECTURES</h4>
+					<p class="justified-text">Switch between Decoder-only (GPT) and Encoder-Decoder (T5) modes to understand different Transformer implementations.</p>
+				</div>
+				<div class="cyber-feature">
+					<h4>MULTI-HEAD ATTENTION</h4>
+					<p class="justified-text">Visualize attention mechanisms with color-coded heads and interactive token inspection for deep architectural understanding.</p>
+				</div>
+				<div class="cyber-feature">
+					<h4>GRADIENT FLOW</h4>
+					<p class="justified-text">Animated backward propagation with gradient visualization shows how neural networks learn and adjust parameters.</p>
+				</div>
+			</div>
+			
+			<!-- Call to Action -->
+			<div class="cyber-cta">
+				<div class="btn-group">
+					<button onclick="window.location.href='https://transformers.gerivan.me/transformers.html'">
+						LAUNCH TRANSFORMERS VISUALIZER
+					</button>
+					<button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md', '_blank')">
+						VIEW DOCUMENTATION
+					</button>
+				</div>
+			</div>
+		</section>
 
         <!-- Neural Network Configuration -->
         <section class="card">
@@ -1268,32 +1332,52 @@
             });
         });
 
-        // NEW: Function to handle iframe loading errors
-        function showIframeFallback(iframe) {
-            iframe.style.display = 'none';
-            document.getElementById('iframeFallback').style.display = 'flex';
-        }
+			// NEW: Function to handle iframe loading errors - NEW FIXED LOGIC  - transformers.html
+			function showIframeFallback(iframe) {
+				iframe.style.display = 'none';
+				document.getElementById('iframeFallback').style.display = 'flex';
+			}
 
-        // Security: Additional protection against script injection
-        document.addEventListener('securitypolicyviolation', function(e) {
-            console.warn('CSP Violation:', e);
-        });
+			// NEW: Function to handle Transformers iframe loading errors
+			function showTransformersFallback(iframe) {
+				iframe.style.display = 'none';
+				document.getElementById('transformersFallback').style.display = 'flex';
+			}
 
-        // NEW: Check if iframe loaded successfully after a timeout
-        setTimeout(function() {
-            const iframe = document.querySelector('.preview-iframe');
-            const iframeFallback = document.getElementById('iframeFallback');
-            
-            // If iframe hasn't loaded content after 3 seconds, show fallback
-            if (iframe && iframe.contentWindow && iframe.contentWindow.document && 
-                iframe.contentWindow.document.readyState === 'complete') {
-                // Iframe loaded successfully
-                console.log('Iframe loaded successfully');
-            } else if (iframe && iframeFallback.style.display === 'none') {
-                // Iframe might have security restrictions, show fallback
-                showIframeFallback(iframe);
-            }
-        }, 3000);
+			// Security: Additional protection against script injection
+			document.addEventListener('securitypolicyviolation', function(e) {
+				console.warn('CSP Violation:', e);
+			});
+
+			// NEW: Check if iframe loaded successfully after a timeout
+			setTimeout(function() {
+				const iframe = document.querySelector('.preview-iframe');
+				const iframeFallback = document.getElementById('iframeFallback');
+				
+				// If iframe hasn't loaded content after 3 seconds, show fallback
+				if (iframe && iframe.contentWindow && iframe.contentWindow.document && 
+					iframe.contentWindow.document.readyState === 'complete') {
+					// Iframe loaded successfully
+					console.log('Iframe loaded successfully');
+				} else if (iframe && iframeFallback.style.display === 'none') {
+					// Iframe might have security restrictions, show fallback
+					showIframeFallback(iframe);
+				}
+			}, 3000);
+
+			// NEW: Check if Transformers iframe loaded successfully after a timeout
+			setTimeout(function() {
+				const transformersIframe = document.querySelector('iframe[src*="transformers-visualizer"]');
+				const transformersFallback = document.getElementById('transformersFallback');
+				
+				if (transformersIframe && transformersIframe.contentWindow && 
+					transformersIframe.contentWindow.document && 
+					transformersIframe.contentWindow.document.readyState === 'complete') {
+					console.log('Transformers iframe loaded successfully');
+				} else if (transformersIframe && transformersFallback.style.display === 'none') {
+					showTransformersFallback(transformersIframe);
+				}
+			}, 3000);
     </script>
 </body>
 </html>
