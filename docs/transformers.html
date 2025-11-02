@@ -484,13 +484,30 @@
     // Block selection
     document.onselectstart = () => false;
 
-    // Block DevTools via size detection
-    setInterval(() => {
-      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-        document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:100px;">Access denied.</h1>';
-      }
-    }, 1000);
-  </script>
+	<!-- Protection Scripts - FIXED -->
+	<script>
+	  // Block F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I, etc.
+	  document.onkeydown = function(e) {
+		if (
+		  e.keyCode == 123 || // F12
+		  (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) ||
+		  (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
+		  (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0))
+		) {
+		  e.preventDefault();
+		  return false;
+		}
+	  };
+
+	  // Block context menu
+	  document.addEventListener('contextmenu', e => e.preventDefault());
+
+	  // Block selection
+	  document.onselectstart = () => false;
+
+	  // CORRECTION: Removed window size detection that caused desktop blocking
+	  // This part was blocking normal desktop viewing
+	</script>
 
   <!-- Transformer Logic -->
   <script>
