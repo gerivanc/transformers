@@ -1,4 +1,4 @@
-# 🤖 Transformers Interactive Neural Network Visualizer
+# 🤖 Cyber Neural Network Visualization & 🧠 Transformers Neural Network — Interactive Visualizer
 
 **Interactive tool for visualizing an artificial neural network, illustrating data flow from the input layer through hidden layers to the output layer**
 
