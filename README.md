@@ -1,127 +1,134 @@
 # 🤖 Cyber Neural Network Visualization & 🧠 Transformers Neural Network — Interactive Visualizer
 
-**Interactive tool for visualizing an artificial neural network, illustrating data flow from the input layer through hidden layers to the output layer**
+**Dual-mode interactive tool for visualizing artificial neural networks and Transformer architectures, illustrating complex machine learning concepts through real-time visual representations**
 
 ## 🚧 Project Status: Under Development
 
-This project is currently in the deployment phase. We're building an interactive neural network visualization tool that makes machine learning accessible and understandable through real-time visual representations of artificial neural networks.
+This project is currently in active development, featuring two distinct but complementary visualization systems:
 
-**Coming Soon:** More features are under development, including real-time training, different activation functions, and input data visualization.
+- **🤖 Cyber Neural Network**: Abstract network visualization with interactive node systems
+- **🧠 Transformers Neural Network**: Real Transformer architecture with live training
 
-Follow the project page at: [Transformers](https://transformers.gerivan.me)
+**Live Demo:** [Transformers Interactive Visualizer](https://transformers.gerivan.me)
 
-## 🌟 Overview
+## 🌟 Dual-System Overview
 
-The Transformers Interactive Neural Network Visualizer is an educational web application that demonstrates how artificial neural networks process information. The tool provides an intuitive visual interface to understand complex machine learning concepts through interactive experimentation.
+### 🤖 Cyber Neural Network Visualization
+An abstract, artistic representation of neural network principles featuring:
+- **Dual-mode rendering** (Cyber/Tech vs Complex aesthetic modes)
+- **Interactive physics engine** with node repulsion and force calculations
+- **Real-time performance optimization** with spatial partitioning algorithms
+- **Advanced visual effects** including multi-layer glow and gradient connections
 
-## ✨ Features
+**Explore:** [Cyber Neural Network](https://transformers.gerivan.me/neural.html)  
+**Methodology:** [Calculation Details](https://github.com/gerivanc/transformers/blob/main/Neural_Calculation_Methodology.md)
 
-### Current Implementation
-- **Interactive Network Configuration**
-  - Adjustable input neurons (1-10)
-  - Configurable hidden layers (1-5)
-  - Customizable neurons per hidden layer (1-10)
-  - Adjustable output neurons (1-5)
+### 🧠 Transformers Neural Network — Interactive Visualizer
+A fully functional Transformer architecture implementation featuring:
+- **Real-time training** with TensorFlow.js in the browser
+- **Dual architecture modes** (GPT-style decoder-only vs T5-style encoder-decoder)
+- **Multi-head attention visualization** with color-coded attention heads
+- **Animated forward/backward propagation** with gradient flow visualization
+- **Live embeddings projection** in 2D space
 
-- **Real-time Visualization**
-  - Dynamic neural network rendering
-  - Visual representation of neurons and connections
-  - Layer-by-layer activation simulation
-  - Responsive design for various screen sizes
-
-- **Educational Components**
-  - Step-by-step activation propagation
-  - Visual feedback during simulation
-  - Explanatory content about neural networks
-  - Interactive learning experience
-
-### Visual Elements
-- **Neurons**: Circular nodes representing artificial neurons
-- **Connections**: Lines showing weighted connections between layers
-- **Activation Flow**: Animated signal propagation through the network
-- **Layer Organization**: Clear separation of input, hidden, and output layers
-
-## 🛠️ Technical Implementation
-
-### Architecture
-The visualizer is built as a single-page web application using:
-- **HTML5** for structure
-- **CSS3** with CSS variables for theming
-- **Vanilla JavaScript** for interactivity and dynamic rendering
-
-### Key Components
-1. **Network Configuration Interface**
-   - Range sliders for parameter adjustment
-   - Real-time value display
-   - Control buttons for network operations
-
-2. **Canvas Rendering System**
-   - Dynamic neuron positioning
-   - Connection line calculations
-   - Layer organization algorithms
-
-3. **Simulation Engine**
-   - Sequential activation timing
-   - Visual state management
-   - Reset and update functionality
+**Explore:** [Transformers Visualizer](https://transformers.gerivan.me/transformers.html)  
+**Methodology:** [Calculation Details](https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md)
 
 ## 🎯 Educational Value
 
-This tool helps users understand:
-- How data flows through neural networks
-- The impact of network architecture on processing
-- The concept of layer-by-layer transformation
-- Basic principles of deep learning
+### Cyber Neural Network Teaches:
+- Graph theory and network topology principles
+- Force-directed layout algorithms
+- Visual hierarchy and information coding
+- Interactive physics simulations
+- Performance optimization techniques
+
+### Transformers Visualizer Demonstrates:
+- Real Transformer architecture mathematics
+- Attention mechanism implementations
+- Backpropagation and gradient descent
+- Multi-head attention patterns
+- Encoder-decoder vs decoder-only architectures
+
+## 🛠️ Technical Implementation
+
+### Cyber Neural Network Architecture
+- **Poisson Disc Sampling** for optimal node distribution
+- **Distance-based probabilistic linking** algorithms
+- **Performance-optimized rendering** with adaptive quality scaling
+- **Multi-layer visual effects** with radial gradients and glow simulations
+
+### Transformers Implementation
+- **TensorFlow.js powered** real neural networks
+- **Scaled dot-product attention** with multi-head processing
+- **Positional encoding** using trigonometric functions
+- **Real-time training loops** with gradient visualization
+- **Secure, copy-protected execution** environment
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Modern web browser with WebGL 2.0+ support
 - JavaScript enabled
-- Recommended: 1920x1080 resolution or higher
+- Recommended: 1920×1080 resolution or higher
 
-### Installation
-No installation required! The application runs directly in your web browser.
+### No Installation Required
+Both visualizers run directly in your web browser:
+- **Cyber Neural Network**: Interactive abstract network exploration
+- **Transformers Visualizer**: Real Transformer architecture with live training
 
-### Usage
-1. Adjust the network parameters using the sliders
-2. Click "Update Network" to render the new architecture
-3. Use "Simulate Activation" to see data flow through the network
-4. Experiment with different configurations to understand network behavior
+### Quick Usage Guide
 
-## 🔮 Roadmap
+#### For Cyber Neural Network:
+1. Toggle between **Cyber** (performance) and **Complex** (aesthetic) modes
+2. Click and drag to interact with nodes using physics-based repulsion
+3. Observe real-time connection patterns and network behavior
+4. Experience smooth 60 FPS rendering with advanced visual effects
+
+#### For Transformers Visualizer:
+1. Click **"Train"** to watch real-time model training and loss reduction
+2. Use **"Forward"** to see data flow through Transformer layers
+3. Click **"Backward"** to observe gradient propagation during backpropagation
+4. Switch between **GPT** and **T5** architecture modes
+5. Click any token to inspect attention weights and gradient influences
+
+## 🔮 Development Roadmap
 
 ### Phase 1: Core Visualization ✅
-- [x] Basic neural network rendering
-- [x] Interactive parameter adjustment
-- [x] Activation simulation
-- [x] Responsive design
+- [x] Dual-system architecture implementation
+- [x] Real-time rendering engines
+- [x] Interactive user interfaces
+- [x] Responsive design systems
 
 ### Phase 2: Enhanced Features 🚧
-- [ ] Real-time training visualization
-- [ ] Multiple activation functions (ReLU, Sigmoid, Tanh)
-- [ ] Input data visualization and processing
-- [ ] Weight and bias adjustment
-- [ ] Backpropagation visualization
+- [ ] Advanced training visualization for Transformers
+- [ ] WebGL acceleration for Cyber Neural Network
+- [ ] Additional network architectures
+- [ ] Export and sharing capabilities
 
 ### Phase 3: Advanced Capabilities 📋
+- [ ] Custom dataset support
 - [ ] Pre-trained model demonstrations
-- [ ] Custom dataset upload
-- [ ] Performance metrics display
-- [ ] Export functionality for network configurations
-- [ ] Educational tutorials and examples
+- [ ] Collaborative visualization features
+- [ ] Extended educational content
 
-## 🎨 Customization
+## 🎨 Visual Design Philosophy
 
-The visualizer features a modern dark theme with:
-- Gradient color schemes for different layers
-- Smooth animations and transitions
-- Interactive hover effects
-- Accessible color contrasts
+Both systems employ distinct visual languages:
+- **Cyber Neural Network**: Cyberpunk aesthetic with neon colors and motion trails
+- **Transformers Visualizer**: Technical visualization with attention heatmaps and gradient flows
 
-## 🤝 Contributing
+Each maintains performance-optimized rendering while providing engaging, educational experiences.
 
-While this is primarily an educational project, suggestions and feedback are welcome. Please visit the project page for contribution guidelines.
+## 📚 Comprehensive Documentation
+
+For detailed mathematical foundations and implementation methodologies:
+- **[Cyber Neural Network Calculations](https://github.com/gerivanc/transformers/blob/main/Neural_Calculation_Methodology.md)**
+- **[Transformers Architecture Calculations](https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md)**
+
+## 🤝 Contributing & Feedback
+
+This educational project welcomes suggestions and feedback. Both systems are designed to make complex machine learning concepts accessible through interactive visualization.
 
 ## 📄 License
 
@@ -129,11 +136,13 @@ This project is licensed under the terms included in the [LICENSE](https://githu
 
 ## 📞 Support
 
-For questions or support regarding the Transformers Interactive Neural Network Visualizer:
-- Visit the project page: [Transformers](https://transformers.gerivan.me)
-- Check the GitHub repository for updates and documentation
+For questions regarding either visualization system:
+- Visit the main project page: [Transformers Interactive Visualizer](https://transformers.gerivan.me)
+- Explore the GitHub repository for detailed documentation
+- Review methodology documents for technical implementation details
 
 ---
 
 **Copyright © 2025 Gerivan Costa dos Santos**  
-**Transformers Interactive Neural Network Visualizer © 2025**
+**Transformers Interactive Neural Network Visualizer © 2025**  
+**Dual-system architecture: Cyber Neural Network & Transformers Visualizer**
