@@ -740,11 +740,11 @@
             <!-- New paragraph about The Transformers Project  -->			
             <p class="justified-text">The <strong>"Transformers"</strong> Project features two tools with interactive visualization: <strong>Cybernetic Neural Network Visualization</strong> and <strong>Transformer Neural Networks</strong>.</p>
 
-            <p class="justified-text">The <strong>Cyber Neural Network  - Dual Mode</strong> visualizer demonstrates the future of information visualization through interconnected neural networks. It is based on a <strong>Multi-Layer Perceptron (MLP)</strong> architecture, featuring real-time forward propagation visualization. This represents the next frontier in understanding complex data flows within artificial intelligence systems.</p>
+            <p class="justified-text">The <strong>Cyber Neural Network  - Dual Mode</strong> visualizer demonstrates the future of information visualization through interconnected neural networks. It is based on a <strong>Multi-Layer Perceptron (MLP)</strong> architecture, <strong>(introduced in the paper “AIive: Interactive Visualization and Sonification of Neural Networks in Virtual Reality” – Lyu; Li; Wang, 2021)</strong>, featuring real-time forward propagation visualization. This represents the next frontier in understanding complex data flows within artificial intelligence systems.</p>
 
             <p class="justified-text">The Cyber Neural Network - Dual Mode represents a breakthrough in neural network visualization technology, implementing a sophisticated dual-mode architecture that optimizes node distribution through advanced spatial partitioning algorithms. This system employs a hybrid force-directed layout with adaptive gravitational constraints, ensuring optimal node density while maintaining visual clarity across both Cyber/Tech and Complex visualization modes. The network efficiently handles high-dimensional data flow through intelligent edge bundling and dynamic connection prioritization, visualizing information propagation with sub-millisecond precision. Our proprietary node interaction model simulates real neural behavior with configurable activation thresholds, synaptic strength modulation, and adaptive learning patterns, providing unprecedented insight into artificial intelligence decision-making processes at both macro and micro architectural levels.</p>            
 			
-            <p class="justified-text">The <strong>Transformer Neural Network</strong> visualizer refers, in the context of modern AI, specifically to the <strong>"Transformer"</strong> architecture (introduced in the paper “Attention is All You Need” – Vaswani et al., 2017), used in models like <strong>BERT, GPT, and Grok</strong>. This architecture is revolutionary for replacing recurrent networks <strong>(RNN/LSTM)</strong> with <strong>self-attention</strong> mechanisms, enabling efficient parallel processing of entire sequences without strict temporal dependencies. It "transforms" data representations through <strong>encoder/decoder</strong> blocks with </strong>multi-head</strong> attention.</p>			
+            <p class="justified-text">The <strong>Transformer Neural Network</strong> visualizer refers, in the context of modern AI, specifically to the <strong>"Transformer"</strong> architecture <strong>(introduced in the paper “Attention is All You Need” – Vaswani et al., 2017)</strong>, used in models like <strong>BERT, GPT, and Grok</strong>. This architecture is revolutionary for replacing recurrent networks <strong>(RNN/LSTM)</strong> with <strong>self-attention</strong> mechanisms, enabling efficient parallel processing of entire sequences without strict temporal dependencies. It "transforms" data representations through <strong>encoder/decoder</strong> blocks with </strong>multi-head</strong> attention.</p>			
             
             <p class="justified-text">The <strong>Transformers</strong> architecture, introduced in 2017 by Vaswani et al., revolutionized AI by replacing recurrent networks with <strong>self-attention</strong>, enabling entire sequences to be processed in parallel while capturing long-range dependencies with scalable efficiency; from it stem <strong>GPT, Grok, LLaMA</strong>, and <strong>BERT</strong>, which now power chatbots, assistants, and content creators deeply embedded in daily life. In today’s reality, this technology fuels an <strong>irreversible wave of AI</strong> that democratizes access to billion-parameter models via the internet, simulating understanding so convincingly that it reshapes jobs, education, art, and human relationships — no longer as a tool, but as <strong>accelerating social infrastructure</strong>.</p>
 
@@ -781,9 +781,10 @@
             <!-- MOVED: Buttons moved to be below the iframe and centered -->
             <div class="cyber-cta">
                 <div class="btn-group">
-                    <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">IN TWO WAYS EXPLORE THE CYBERNETIC NEURAL NETWORK</button>
-                    <button onclick="window.open('https://github.com/gerivanc/transformers/tree/main/docs', '_blank')" rel="noopener noreferrer">
-                        VIEW SOURCE CODE
+                    <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">LAUNCH CYBER NEURAL NETWORK</button>
+                    <button onclick="window.location.href='https://transformers.gerivan.me/neural-specifications.html'">TECHNICAL SPECIFICATIONS</button>
+                    <button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Neural_Calculation_Methodology.md', '_blank')" rel="noopener noreferrer">
+                        VIEW DOCUMENTATION
                     </button>
                 </div>
             </div>
@@ -824,18 +825,16 @@
 						allowfullscreen
 						onerror="showTransformersFallback(this)">
 				</iframe>
-				<!-- Fallback content -->
-				<div class="iframe-fallback" id="transformersFallback" style="display: none;">
-					<h3>TRANSFORMERS VISUALIZER PREVIEW</h3>
-					<p>Interactive neural network visualization could not be loaded directly.</p>
-					<div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-						<button onclick="window.open('https://transformers.gerivan.me/transformers.html', '_blank')">
-							OPEN VISUALIZER
-						</button>
-						<button onclick="window.open('https://github.com/gerivanc/transformers', '_blank')">
-							VIEW SOURCE CODE
-						</button>
-					</div>
+			</div>
+		
+			<!-- Call to Action -->
+			<div class="cyber-cta">
+				<div class="btn-group">
+					<button onclick="window.location.href='https://transformers.gerivan.me/transformers.html'">LAUNCH TRANSFORMERS NEURAL NETWORK</button>						
+                    <button onclick="window.location.href='https://transformers.gerivan.me/transformers-specifications.html'">TECHNICAL SPECIFICATIONS</button>
+					<button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md', '_blank')">
+						VIEW DOCUMENTATION
+					</button>
 				</div>
 			</div>
 			
@@ -858,23 +857,19 @@
 					<p class="justified-text">Animated backward propagation with gradient visualization shows how neural networks learn and adjust parameters.</p>
 				</div>
 			</div>
-			
-			<!-- Call to Action -->
-			<div class="cyber-cta">
-				<div class="btn-group">
-					<button onclick="window.location.href='https://transformers.gerivan.me/transformers.html'">
-						LAUNCH TRANSFORMERS VISUALIZER
-					</button>
-					<button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md', '_blank')">
-						VIEW DOCUMENTATION
-					</button>
-				</div>
-			</div>
-		</section>
+		</section>			
+
+        <!-- Neural Network Visualization -->
+        <section class="card">
+            <h2>NEURAL NETWORK VISUALIZATION MATRIX</h2>
+            <div class="neural-network-container" id="network-container">
+                <!-- Neural network will be dynamically rendered here -->
+            </div>
+        </section>
 
         <!-- Neural Network Configuration -->
         <section class="card">
-            <h2>NEURAL NETWORK ARCHITECTURE CONFIGURATION</h2>
+            <h2>NEURAL NETWORK ARCHITECTURE MATRIX CONFIGURATION</h2>
             <div class="controls">
                 <div class="control-group">
                     <label for="input-neurons">INPUT NEURONS: <span id="input-value" class="range-value">3</span></label>
@@ -905,17 +900,9 @@
             </div>
         </section>
 
-        <!-- Neural Network Visualization -->
-        <section class="card">
-            <h2>NEURAL NETWORK VISUALIZATION MATRIX</h2>
-            <div class="neural-network-container" id="network-container">
-                <!-- Neural network will be dynamically rendered here -->
-            </div>
-        </section>
-
         <!-- Technical Specifications -->
         <section class="card">
-            <h2>TECHNICAL SPECIFICATIONS</h2>
+            <h2>MATRIX TECHNICAL SPECIFICATIONS</h2>
             <div class="specs-grid">
                 <div class="spec-item">
                     <h4>ARCHITECTURE OVERVIEW</h4>
@@ -936,28 +923,43 @@
             </div>
         </section>
 
-        <!-- Project Links -->
-        <section class="card">
-            <h2>PROJECT REPOSITORY</h2>
-            <div class="btn-group">
-                <button onclick="window.open('https://github.com/gerivanc/transformers', '_blank')" rel="noopener noreferrer">
-                    GITHUB REPOSITORY
-                </button>
-                <button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/LICENSE', '_blank')" rel="noopener noreferrer">
-                    LICENSE AGREEMENT
-                </button>
+		<!-- Project Links -->
+		<section class="card">
+			<h2>PROJECT REPOSITORY</h2>
+			<div class="btn-group">
+				<button onclick="window.open('https://github.com/gerivanc/transformers', '_blank')" rel="noopener noreferrer">
+					GITHUB REPOSITORY
+				</button>
+				<button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/LICENSE', '_blank')" rel="noopener noreferrer">
+					LICENSE AGREEMENT
+				</button>
+                </div>
             </div>
         </section>
-    </div>
 
-    <footer>
-        <div class="container">
-            <p>Copyright © 2025 Gerivan Costa dos Santos</p>
-            <p>Transformers Interactive Neural Network Visualizer © 2025</p>
-            <p>Dual-system architecture: Cyber Neural Network & Transformers Visualizer</p>
-            <p>Secure Connection Established • Neural Network Active</p>
-        </div>
-    </footer>
+		<!-- Link references for the Project -->
+		<div class="container">
+		<section class="card">
+			<h2>REFERENCES IN THE PROJECT - CYBER NEURAL NETWORK AND TRANSFORMERS NEURAL NETWORK</h2>
+			<div class="btn-group">
+				<button onclick="window.open('https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf', '_blank')" rel="noopener noreferrer">
+					TRANSFORMERS NEURAL
+				</button>
+				<button onclick="window.open('https://arxiv.org/pdf/2109.15193', '_blank')" rel="noopener noreferrer">
+					CYBER NEURAL 
+				</button>
+                </div>
+            </div>
+        </section>
+		
+		<footer>
+			<div class="container">
+				<p>Copyright © 2025 Gerivan Costa dos Santos</p>
+				<p>Transformers Interactive Neural Network Visualizer © 2025</p>
+				<p>Dual-system architecture: Cyber Neural Network & Transformers Visualizer</p>
+				<p>Secure Connection Established • Neural Network Active</p>
+			</div>
+		</footer>
 
     <script>
         // Security: Prevent inline event handlers from executing malicious code
