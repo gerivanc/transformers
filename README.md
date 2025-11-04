@@ -2,7 +2,7 @@
 
 **Dual-mode interactive tool for visualizing artificial neural networks and Transformer architectures, illustrating complex machine learning concepts through real-time visual representations**
 
-## 🚧 Project Status: Under Development
+## ⏱ Project Status: active
 
 This project is currently in active development, featuring two distinct but complementary visualization systems:
 
@@ -125,6 +125,11 @@ Each maintains performance-optimized rendering while providing engaging, educati
 For detailed mathematical foundations and implementation methodologies:
 - **[Cyber Neural Network Calculations](https://github.com/gerivanc/transformers/blob/main/Neural_Calculation_Methodology.md)**
 - **[Transformers Architecture Calculations](https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md)**
+
+## 🚥 References in the Project
+
+- [Cyber Neural Network](https://arxiv.org/pdf/2109.15193)
+- [Transformers Neural Network](https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
 
 ## 🤝 Contributing & Feedback
 
