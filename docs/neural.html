@@ -45,6 +45,8 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            -webkit-touch-callout: none; /* Disable callout on long press */
         }
         
         /* Body styling with cyber theme */
@@ -61,6 +63,7 @@
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(255, 100, 0, 0.05) 0%, transparent 20%);
+            touch-action: manipulation; /* Improve touch responsiveness */
         }
         
         /* Main container */
@@ -371,6 +374,25 @@
             font-size: 0.8rem;
         }
         
+        /* Touch gesture indicator for mobile */
+        .touch-indicator {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(57, 255, 20, 0.5);
+            pointer-events: none;
+            z-index: 15;
+            transform: translate(-50%, -50%);
+            display: none;
+            animation: pulse 0.5s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+        
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             /* Adjust header spacing for mobile */
@@ -527,6 +549,8 @@
             <canvas id="networkCanvas"></canvas>
             <div class="scan-line"></div>
             <div class="binary-rain" id="binaryRain"></div>
+            <!-- Touch gesture indicators for mobile -->
+            <div id="touchIndicators"></div>
         </div>
         
         <div class="controls">
@@ -779,13 +803,17 @@
                 this.nodeCount = 150;
                 this.mode = 'cyber';
                 // Add properties for interaction
-                this.draggedNode = null;
+                this.draggedNodes = new Map(); // Support for multiple dragged nodes (multitouch)
                 this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 // Add properties for improved interaction
                 this.interactionRadius = 300;
                 this.interactionStrength = 2;
                 this.lastInteractionTime = 0;
                 this.interactionCooldown = 16; // ~60fps
+                // Properties for gesture recognition
+                this.pinchStartDistance = 0;
+                this.pinchStartNodeCount = this.nodeCount;
+                this.touchIndicators = document.getElementById('touchIndicators');
             }
             
             // Generate nodes and connections for the network
@@ -877,14 +905,9 @@
                 }
                 this.lastInteractionTime = now;
                 
-                // For mobile, only interact when dragging a specific node
-                if (this.isMobile && this.draggedNode) {
-                    this.draggedNode.x = x;
-                    this.draggedNode.y = y;
-                    
-                    // Constrain node to canvas
-                    this.draggedNode.x = Math.max(this.draggedNode.radius, Math.min(canvas.width - this.draggedNode.radius, this.draggedNode.x));
-                    this.draggedNode.y = Math.max(this.draggedNode.radius, Math.min(canvas.height - this.draggedNode.radius, this.draggedNode.y));
+                // For mobile, only interact when dragging specific nodes
+                if (this.isMobile && this.draggedNodes.size > 0) {
+                    // Dragged nodes are handled in the touchmove event
                     return;
                 }
                 
@@ -925,102 +948,167 @@
                 return null;
             }
             
-            // Start dragging a node (for mobile)
-            startDrag(x, y) {
-                this.draggedNode = this.findNodeAt(x, y);
-                // Visual feedback for node selection
-                if (this.draggedNode) {
-                    this.draggedNode.baseRadius *= 1.5; // Enlarge selected node
+            // Start dragging a node (for mobile multitouch)
+            startDrag(touchId, x, y) {
+                const node = this.findNodeAt(x, y);
+                if (node) {
+                    // Visual feedback for node selection
+                    node.baseRadius *= 1.5; // Enlarge selected node
+                    this.draggedNodes.set(touchId, node);
+                    
+                    // Create touch indicator
+                    this.createTouchIndicator(x, y);
                 }
             }
             
-            // Stop dragging (for mobile)
-            stopDrag() {
-                if (this.draggedNode) {
-                    // Restore original size
-                    this.draggedNode.baseRadius /= 1.5;
-                    this.draggedNode = null;
+            // Update dragged node position (for mobile multitouch)
+            updateDrag(touchId, x, y) {
+                const node = this.draggedNodes.get(touchId);
+                if (node) {
+                    node.x = x;
+                    node.y = y;
+                    
+                    // Constrain node to canvas
+                    node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
+                    node.y = Math.max(node.radius, Math.min(canvas.height - node.radius, node.y));
+                    
+                    // Update touch indicator
+                    this.createTouchIndicator(x, y);
                 }
+            }
+            
+            // Stop dragging (for mobile multitouch)
+            stopDrag(touchId) {
+                const node = this.draggedNodes.get(touchId);
+                if (node) {
+                    // Restore original size
+                    node.baseRadius /= 1.5;
+                    this.draggedNodes.delete(touchId);
+                }
+            }
+            
+            // Create visual indicator for touch points
+            createTouchIndicator(x, y) {
+                if (!this.isMobile) return;
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'touch-indicator';
+                indicator.style.left = x + 'px';
+                indicator.style.top = y + 'px';
+                this.touchIndicators.appendChild(indicator);
+                
+                // Remove indicator after animation
+                setTimeout(() => {
+                    if (indicator.parentNode) {
+                        indicator.parentNode.removeChild(indicator);
+                    }
+                }, 500);
+            }
+            
+            // Handle pinch gesture for node count adjustment
+            handlePinch(startDistance, endDistance) {
+                if (this.pinchStartDistance === 0) {
+                    this.pinchStartDistance = startDistance;
+                    this.pinchStartNodeCount = this.nodeCount;
+                }
+                
+                const scale = endDistance / this.pinchStartDistance;
+                const newCount = Math.max(50, Math.min(500, Math.round(this.pinchStartNodeCount * scale)));
+                
+                if (newCount !== this.nodeCount) {
+                    this.nodeCount = newCount;
+                    this.generateNodes();
+                    document.getElementById('nodeCount').textContent = this.nodeCount;
+                    document.getElementById('nodeCountSlider').value = this.nodeCount;
+                    document.getElementById('nodeCountValue').textContent = this.nodeCount;
+                }
+            }
+            
+            // Reset pinch gesture tracking
+            resetPinch() {
+                this.pinchStartDistance = 0;
+                this.pinchStartNodeCount = this.nodeCount;
             }
         }
         
-        // Initialize network
+        // Create network instance
         const network = new Network();
         network.generateNodes();
         
-        // Create binary rain effect for cyber aesthetic
-        function createBinaryRain() {
-            const binaryRain = document.getElementById('binaryRain');
-            const digits = '01';
-            
-            for (let i = 0; i < 100; i++) {
-                const digit = document.createElement('div');
-                digit.className = 'binary-digit';
-                digit.textContent = digits.charAt(Math.floor(Math.random() * digits.length));
-                digit.style.left = Math.random() * 100 + 'vw';
-                digit.style.animationDuration = (Math.random() * 10 + 5) + 's';
-                digit.style.animationDelay = Math.random() * 5 + 's';
-                binaryRain.appendChild(digit);
-            }
-        }
+        // UI Controls
+        const nodeIntensitySlider = document.getElementById('nodeIntensity');
+        const nodeIntensityValue = document.getElementById('nodeIntensityValue');
+        const pulseSpeedSlider = document.getElementById('pulseSpeed');
+        const pulseSpeedValue = document.getElementById('pulseSpeedValue');
+        const nodeCountSlider = document.getElementById('nodeCountSlider');
+        const nodeCountValue = document.getElementById('nodeCountValue');
+        const resetButton = document.getElementById('resetButton');
+        const cyberModeBtn = document.getElementById('cyberModeBtn');
+        const complexModeBtn = document.getElementById('complexModeBtn');
+        const toggleControlsBtn = document.getElementById('toggleControls');
+        const toggleCardBtn = document.getElementById('toggleCard');
+        const controlsPanel = document.querySelector('.controls');
+        const cardPanel = document.querySelector('.card');
         
-        // Update control values display
-        function updateControlValues() {
-            document.getElementById('nodeIntensityValue').textContent = document.getElementById('nodeIntensity').value;
-            document.getElementById('pulseSpeedValue').textContent = document.getElementById('pulseSpeed').value;
-            document.getElementById('nodeCountValue').textContent = document.getElementById('nodeCountSlider').value;
-            document.getElementById('nodeCount').textContent = document.getElementById('nodeCountSlider').value;
-        }
-        
-        // Mobile UI toggle functionality
-        function setupMobileUI() {
-            const controls = document.querySelector('.controls');
-            const card = document.querySelector('.card');
-            const toggleControlsBtn = document.getElementById('toggleControls');
-            const toggleCardBtn = document.getElementById('toggleCard');
-            
-            // Hide panels by default on mobile
-            if (network.isMobile) {
-                controls.classList.add('hidden');
-                card.classList.add('hidden');
-            }
-            
-            // Toggle controls panel
-            toggleControlsBtn.addEventListener('click', function() {
-                controls.classList.toggle('hidden');
-                // If showing controls, hide card to avoid overlap
-                if (!controls.classList.contains('hidden')) {
-                    card.classList.add('hidden');
-                }
-            });
-            
-            // Toggle card panel
-            toggleCardBtn.addEventListener('click', function() {
-                card.classList.toggle('hidden');
-                // If showing card, hide controls to avoid overlap
-                if (!card.classList.contains('hidden')) {
-                    controls.classList.add('hidden');
-                }
-            });
-        }
-        
-        // Event listeners for controls
-        document.getElementById('nodeIntensity').addEventListener('input', function() {
+        // Update node intensity
+        nodeIntensitySlider.addEventListener('input', function() {
             network.nodeIntensity = this.value;
-            updateControlValues();
+            nodeIntensityValue.textContent = this.value;
         });
         
-        document.getElementById('pulseSpeed').addEventListener('input', function() {
+        // Update pulse speed
+        pulseSpeedSlider.addEventListener('input', function() {
             network.pulseSpeed = this.value;
-            updateControlValues();
+            pulseSpeedValue.textContent = this.value;
         });
         
-        document.getElementById('nodeCountSlider').addEventListener('input', function() {
-            network.nodeCount = this.value;
+        // Update node count
+        nodeCountSlider.addEventListener('input', function() {
+            network.nodeCount = parseInt(this.value);
+            nodeCountValue.textContent = this.value;
+            document.getElementById('nodeCount').textContent = this.value;
             network.generateNodes();
-            updateControlValues();
         });
         
+        // Reset visualization
+        resetButton.addEventListener('click', function() {
+            network.generateNodes();
+        });
+        
+        // Switch to cyber mode
+        cyberModeBtn.addEventListener('click', function() {
+            network.setMode('cyber');
+            cyberModeBtn.classList.add('active');
+            complexModeBtn.classList.remove('active');
+        });
+        
+        // Switch to complex mode
+        complexModeBtn.addEventListener('click', function() {
+            network.setMode('complex');
+            complexModeBtn.classList.add('active');
+            cyberModeBtn.classList.remove('active');
+        });
+        
+        // Toggle controls panel on mobile
+        toggleControlsBtn.addEventListener('click', function() {
+            controlsPanel.classList.toggle('hidden');
+        });
+        
+        // Toggle card panel on mobile
+        toggleCardBtn.addEventListener('click', function() {
+            cardPanel.classList.toggle('hidden');
+        });
+        
+        // Mouse interaction for desktop
+        canvas.addEventListener('mousemove', function(e) {
+            if (!network.isMobile) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                network.handleInteraction(x, y);
+            }
+        });
+
         // Reset button functionality
         document.getElementById('resetButton').addEventListener('click', function() {
             // Reset all sliders to default values
@@ -1040,59 +1128,140 @@
             updateControlValues();
         });
         
-        // Mode selector functionality
-        document.getElementById('cyberModeBtn').addEventListener('click', function() {
-            currentMode = 'cyber';
-            network.setMode('cyber');
-            document.getElementById('cyberModeBtn').classList.add('active');
-            document.getElementById('complexModeBtn').classList.remove('active');
-        });
-        
-        document.getElementById('complexModeBtn').addEventListener('click', function() {
-            currentMode = 'complex';
-            network.setMode('complex');
-            document.getElementById('complexModeBtn').classList.add('active');
-            document.getElementById('cyberModeBtn').classList.remove('active');
-        });
-        
-        // Mouse interaction for desktop
+        // Track mouse position
         canvas.addEventListener('mousemove', function(e) {
-            if (!network.isMobile) {
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                network.handleInteraction(x, y);
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (isMouseDown) {
+                network.handleInteraction(mouseX, mouseY, true);
+            } else {
+                network.handleInteraction(mouseX, mouseY, false);
             }
         });
         
+        // Track mouse down
+        canvas.addEventListener('mousedown', function(e) {
+            isMouseDown = true;
+            network.handleInteraction(mouseX, mouseY, true);
+        });
+        
+        // Track mouse up
+        canvas.addEventListener('mouseup', function() {
+            isMouseDown = false;
+        });
+        
         // Touch interaction for mobile
+        let activeTouches = new Map(); // Track active touches
+        
+        // Handle touch start
         canvas.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            network.startDrag(x, y);
-        });
+            e.preventDefault(); // Prevent default touch behavior
+            
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                const x = touch.clientX;
+                const y = touch.clientY;
+                
+                // Store touch
+                activeTouches.set(touch.identifier, { x, y });
+                
+                // Start dragging if we have a node at this position
+                network.startDrag(touch.identifier, x, y);
+            }
+            
+            // Handle pinch gesture if exactly two touches
+            if (activeTouches.size === 2) {
+                const touches = Array.from(activeTouches.values());
+                const dx = touches[1].x - touches[0].x;
+                const dy = touches[1].y - touches[0].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                network.handlePinch(distance, distance);
+            }
+        }, { passive: false });
         
+        // Handle touch move
         canvas.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            network.handleInteraction(x, y, true);
-        });
+            e.preventDefault(); // Prevent default touch behavior
+            
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                const x = touch.clientX;
+                const y = touch.clientY;
+                
+                // Update touch position
+                activeTouches.set(touch.identifier, { x, y });
+                
+                // Update dragged node
+                network.updateDrag(touch.identifier, x, y);
+            }
+            
+            // Handle pinch gesture if exactly two touches
+            if (activeTouches.size === 2) {
+                const touches = Array.from(activeTouches.values());
+                const dx = touches[1].x - touches[0].x;
+                const dy = touches[1].y - touches[0].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                network.handlePinch(network.pinchStartDistance, distance);
+            }
+        }, { passive: false });
         
+        // Handle touch end
         canvas.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            network.stopDrag();
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                
+                // Stop dragging
+                network.stopDrag(touch.identifier);
+                
+                // Remove touch
+                activeTouches.delete(touch.identifier);
+            }
+            
+            // Reset pinch if less than two touches remain
+            if (activeTouches.size < 2) {
+                network.resetPinch();
+            }
         });
         
-        // Initialize the visualization
+        // Handle touch cancel
+        canvas.addEventListener('touchcancel', function(e) {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                
+                // Stop dragging
+                network.stopDrag(touch.identifier);
+                
+                // Remove touch
+                activeTouches.delete(touch.identifier);
+            }
+            
+            // Reset pinch if less than two touches remain
+            if (activeTouches.size < 2) {
+                network.resetPinch();
+            }
+        });
+        
+        // Binary rain effect
+        function createBinaryRain() {
+            const binaryRain = document.getElementById('binaryRain');
+            const digits = ['0', '1'];
+            
+            // Create initial binary digits
+            for (let i = 0; i < 50; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'binary-digit';
+                digit.textContent = digits[Math.floor(Math.random() * digits.length)];
+                digit.style.left = Math.random() * 100 + 'vw';
+                digit.style.top = Math.random() * 100 + 'vh';
+                digit.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                digit.style.opacity = Math.random() * 0.5 + 0.1;
+                binaryRain.appendChild(digit);
+            }
+        }
+        
+        // Initialize binary rain
         createBinaryRain();
-        updateControlValues();
-        setupMobileUI();
         
         // Animation loop
         function animate() {
@@ -1101,7 +1270,14 @@
             requestAnimationFrame(animate);
         }
         
+        // Start animation
         animate();
+        
+        // Hide controls and card by default on mobile
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            controlsPanel.classList.add('hidden');
+            cardPanel.classList.add('hidden');
+        }
     </script>
 </body>
 </html>
