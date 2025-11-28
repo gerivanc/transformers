@@ -752,6 +752,31 @@
                 font-size: 1.2rem;
             }
         }
+		
+		/*CYBER NEURAL & TRANSFORMERS Section*/
+		a {
+			color: #ff8400;
+			text-decoration: none;    /*window.open*/
+		}
+
+		a:hover {
+			text-decoration: underline; 
+		}
+
+		/*Highlighted neon orange button  – TECHNICAL SPECIFICATIONS*/
+		.btn-specs {
+			background: linear-gradient(90deg, #ff8400, #ff5400) !important;
+			color: #ffffff !important;
+			border: 2px solid #ff8400 !important;
+			box-shadow: 0 0 20px rgba(255, 132, 0, 0.7) !important;
+			font-weight: bold !important;
+		}
+
+		.btn-specs:hover {
+			background: linear-gradient(90deg, #ff9d33, #ff7700) !important;
+			transform: translateY(-4px);
+			box-shadow: 0 0 40px rgba(255, 132, 0, 1) !important;
+		}
 		</style>
 	</head>
 	<body>
@@ -770,24 +795,37 @@
         </div>
     </header>
 
-    <div class="container">
-        <!-- Project Status Section -->
-        <section class="card">
-            <h2>PROJECT STATUS: ACTIVE</h2>
-            <!-- New paragraph about The Transformers Project  -->			
-            <p class="justified-text">The <strong>"Transformers"</strong> Project features two tools with interactive visualization: <strong>Cybernetic Neural Network Visualization</strong> and <strong>Transformer Neural Networks</strong>.</p>
-
-            <p class="justified-text">The <strong>Cyber Neural Network  - Dual Mode</strong> visualizer demonstrates the future of information visualization through interconnected neural networks. It is based on a <strong>Multi-Layer Perceptron (MLP)</strong> architecture, <strong>(introduced in the paper "AIive: Interactive Visualization and Sonification of Neural Networks in Virtual Reality" – Lyu; Li; Wang, 2021)</strong>, featuring real-time forward propagation visualization. This represents the next frontier in understanding complex data flows within artificial intelligence systems.</p>
-
-            <p class="justified-text">The Cyber Neural Network - Dual Mode represents a breakthrough in neural network visualization technology, implementing a sophisticated dual-mode architecture that optimizes node distribution through advanced spatial partitioning algorithms. This system employs a hybrid force-directed layout with adaptive gravitational constraints, ensuring optimal node density while maintaining visual clarity across both Cyber/Tech and Complex visualization modes. The network efficiently handles high-dimensional data flow through intelligent edge bundling and dynamic connection prioritization, visualizing information propagation with sub-millisecond precision. Our proprietary node interaction model simulates real neural behavior with configurable activation thresholds, synaptic strength modulation, and adaptive learning patterns, providing unprecedented insight into artificial intelligence decision-making processes at both macro and micro architectural levels.</p>            
+	<div class="container">
+		<!-- Project Status Section -->
+		<section class="card">
+			<h2>PROJECT STATUS: ACTIVE</h2>
 			
-            <p class="justified-text">The <strong>Transformer Neural Network</strong> visualizer refers, in the context of modern AI, specifically to the <strong>"Transformer"</strong> architecture <strong>(introduced in the paper "Attention is All You Need" – Vaswani et al., 2017)</strong>, used in models like <strong>BERT, GPT, and Grok</strong>. This architecture is revolutionary for replacing recurrent networks <strong>(RNN/LSTM)</strong> with <strong>self-attention</strong> mechanisms, enabling efficient parallel processing of entire sequences without strict temporal dependencies. It "transforms" data representations through <strong>encoder/decoder</strong> blocks with </strong>multi-head</strong> attention.</p>			
-            
-            <p class="justified-text">The <strong>Transformers</strong> architecture, introduced in 2017 by Vaswani et al., revolutionized AI by replacing recurrent networks with <strong>self-attention</strong>, enabling entire sequences to be processed in parallel while capturing long-range dependencies with scalable efficiency; from it stem <strong>GPT, Grok, LLaMA</strong>, and <strong>BERT</strong>, which now power chatbots, assistants, and content creators deeply embedded in daily life. In today's reality, this technology fuels an <strong>irreversible wave of AI</strong> that democratizes access to billion-parameter models via the internet, simulating understanding so convincingly that it reshapes jobs, education, art, and human relationships — no longer as a tool, but as <strong>accelerating social infrastructure</strong>.</p>
-
-            <div class="coming-soon">
-                <h2>INTERACTIVE VIRTUAL REALITY</h3>
-            <p class="justified-text">Among the advanced features developed are real-time training simulations, multiple activation functions, and dynamic visualization of input data with integration to TensorFlow.js.</p>
+			<!-- Paragraph about The Transformers Project -->
+			<p class="justified-text">The <strong>"Transformers"</strong> Project features two tools with interactive visualization: <strong>Cybernetic Neural Network Visualization</strong> and <strong>Transformer Neural Networks</strong>.</p>
+			
+			<p class="justified-text">The <strong>Cyber Neural Network - Dual Mode</strong> visualizer demonstrates the future of information visualization through interconnected neural networks. It is based on a <strong>Multi-Layer Perceptron (MLP)</strong> architecture, <strong>(introduced in the paper "AIive: Interactive Visualization and Sonification of Neural Networks in Virtual Reality" – Lyu; Li; Wang, 2021)</strong>, featuring real-time forward propagation visualization. This represents the next frontier in understanding complex data flows within artificial intelligence systems.</p>
+			
+			<p class="justified-text">The Cyber Neural Network - Dual Mode represents a breakthrough in neural network visualization technology, implementing a sophisticated dual-mode architecture that optimizes node distribution through advanced spatial partitioning algorithms. This system employs a hybrid force-directed layout with adaptive gravitational constraints, ensuring optimal node density while maintaining visual clarity across both Cyber/Tech and Complex visualization modes. The network efficiently handles high-dimensional data flow through intelligent edge bundling and dynamic connection prioritization, visualizing information propagation with sub-millisecond precision. Our proprietary node interaction model simulates real neural behavior with configurable activation thresholds, synaptic strength modulation, and adaptive learning patterns, providing unprecedented insight into artificial intelligence decision-making processes at both macro and micro architectural levels.</p>
+			
+			<p class="justified-text">
+				For more information on the technical specifications of the Cyber Neural project, visit: 
+				<a href="https://transformers.gerivan.me/transformers-specifications.html" target="_blank">
+					Cyber Neural specifications</a>.				
+			</p>
+			
+			<p class="justified-text">The <strong>Transformer Neural Network</strong> visualizer refers, in the context of modern AI, specifically to the <strong>"Transformer"</strong> architecture <strong>(introduced in the paper "Attention is All You Need" – Vaswani et al., 2017)</strong>, used in models like <strong>BERT, GPT, and Grok</strong>. This architecture is revolutionary for replacing recurrent networks <strong>(RNN/LSTM)</strong> with <strong>self-attention</strong> mechanisms, enabling efficient parallel processing of entire sequences without strict temporal dependencies. It "transforms" data representations through <strong>encoder/decoder</strong> blocks with <strong>multi-head</strong> attention.</p>
+		   
+			<p class="justified-text">The <strong>Transformers</strong> architecture, introduced in 2017 by Vaswani et al., revolutionized AI by replacing recurrent networks with <strong>self-attention</strong>, enabling entire sequences to be processed in parallel while capturing long-range dependencies with scalable efficiency; from it stem <strong>GPT, Grok, LLaMA</strong>, and <strong>BERT</strong>, which now power chatbots, assistants, and content creators deeply embedded in daily life. In today's reality, this technology fuels an <strong>irreversible wave of AI</strong> that democratizes access to billion-parameter models via the internet, simulating understanding so convincingly that it reshapes jobs, education, art, and human relationships — no longer as a tool, but as <strong>accelerating social infrastructure</strong>.</p>
+			
+			<p class="justified-text">
+				For more information on the technical specifications of the Transformers project, visit: 
+				<a href="https://transformers.gerivan.me/neural-specifications.html" target="_blank">
+					Transformers specifications</a>.
+			</p>
+			
+			<div class="coming-soon">
+				<h2>INTERACTIVE VIRTUAL REALITY</h2>
+				<p class="justified-text">Among the advanced features developed are real-time training simulations, multiple activation functions, and dynamic visualization of input data with integration to TensorFlow.js.</p>
             </div>
         </section>
 
@@ -819,7 +857,10 @@
             <div class="cyber-cta">
                 <div class="btn-group">
                     <button onclick="window.location.href='https://transformers.gerivan.me/neural.html'">LAUNCH CYBER NEURAL NETWORK</button>
-                    <button onclick="window.location.href='https://transformers.gerivan.me/neural-specifications.html'">TECHNICAL SPECIFICATIONS</button>
+			<!-- Transformers button -->
+					<button class="btn-specs" onclick="window.location.href='https://transformers.gerivan.me/transformers-specifications.html'">
+						TECHNICAL SPECIFICATIONS
+					</button>
                     <button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Neural_Calculation_Methodology.md', '_blank')" rel="noopener noreferrer">
                         VIEW DOCUMENTATION
                     </button>
@@ -868,7 +909,10 @@
 			<div class="cyber-cta">
 				<div class="btn-group">
 					<button onclick="window.location.href='https://transformers.gerivan.me/transformers.html'">LAUNCH TRANSFORMERS NEURAL NETWORK</button>						
-                    <button onclick="window.location.href='https://transformers.gerivan.me/transformers-specifications.html'">TECHNICAL SPECIFICATIONS</button>
+			<!-- Transformers button -->
+					<button class="btn-specs" onclick="window.location.href='https://transformers.gerivan.me/neural-specifications.html'">
+						TECHNICAL SPECIFICATIONS
+					</button>
 					<button onclick="window.open('https://github.com/gerivanc/transformers/blob/main/Transformers_Calculation_Methodology.md', '_blank')" rel="noopener noreferrer">
 						VIEW DOCUMENTATION
 					</button>
