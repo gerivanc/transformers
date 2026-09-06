@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="robots" content="noarchive"/>
+  <!-- NOTE: consolidated into a single, non-conflicting CSP (the previous version had duplicate
+       script-src/style-src/img-src/font-src/frame-src directives; per spec only the FIRST
+       occurrence of a directive in a policy is honored, so several allow-listed sources below
+       were silently ignored before, e.g. the Google Fonts stylesheet was actually blocked) -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
-    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
-                   script-src 'self' 'unsafe-inline'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src 'self' https://fonts.gstatic.com; 
-                   img-src 'self' data: https://*.githubusercontent.com https://img.shields.io https://komarev.com https://github-readme-activity-graph.vercel.app https://nirzak-streak-stats.vercel.app https://github-readme-stats.vercel.app https://github-profile-summary-cards.vercel.app https://vercel.app https://vercel.live;
-                   frame-src 'self' https://transformers.gerivan.me/ https://*.githubusercontent.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
+    font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;
     img-src 'self' data:;
-    font-src 'self' https://cdn.jsdelivr.net;
     connect-src 'none';
     frame-src 'none';
     object-src 'none';
@@ -23,7 +22,10 @@
     form-action 'none';
     upgrade-insecure-requests;
   ">
-  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <!-- NOTE: X-Frame-Options has no effect when set via <meta> — browsers only honor it as a real
+       HTTP response header. Since this page is embedded via <iframe> from index.html on the same
+       origin, actual frame protection (frame-ancestors) should be configured server-side
+       (e.g. a vercel.json / _headers rule allowing only 'self' or https://transformers.gerivan.me). -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
   <meta http-equiv="Referrer-Policy" content="no-referrer"/>
   <meta name="format-detection" content="telephone=no"/>
@@ -33,18 +35,17 @@
 	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/web-app-manifest-784x789.png">
 	<link rel="shortcut icon" href="https://transformers.gerivan.me/web-app-manifest-784x789.png">
 	<link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
-	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
 
-	<!-- Manifest -->
-	<link rel="manifest" href="/site.webmanifest">
+	<!-- NOTE: removed the two duplicate <link rel="manifest"> tags that pointed at different files
+	     (/site.webmanifest and manifest.json); only one manifest link should exist per page. -->
+	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">
 
     <!-- Meta tags for PWA -->
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">  
+    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">
   <title>Transformers Neural Network — Interactive Visualizer</title>
 	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-	<link rel="manifest" href="manifest.json">  
 
   <!-- Three.js for 3D visualizations -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
@@ -467,7 +468,7 @@
   </div>
 
 	<footer>
-		<div class="container">
+		<div class="footer-container">
 			<p>Copyright © 2025 Gerivan Costa dos Santos</p>
 			<p>Transformers Neural Network — Interactive Visualizer © 2025</p>
 			<p>Secure Connection Established • Neural Network Active</p>
@@ -475,25 +476,29 @@
 	</footer>
 
 	<style>
+		/* NOTE: renamed from ".container" to ".footer-container" — the footer previously reused
+		   the main ".container" class defined in the page head, and this block ran AFTER it in source
+		   order, so its "max-width: 800px" rule was silently overriding the main container's
+		   "max-width: 1400px" everywhere on the page, shrinking the whole visualizer layout. */
 		body {
 			margin: 0;
-			background-color: #0a0a0a; /* fundo geral escuro */
+			background-color: #0a0a0a; /* dark background */
 			color: #ffffff;
 			font-family: 'Segoe UI', sans-serif;
 		}
 
 		footer {
 			padding: 40px 0;
-			background-color: #0a0a0a; /* fundo escuro do rodapé */
+			background-color: #0a0a0a; /* dark footer background */
 			text-align: center;
 		}
 
-		.container {
+		.footer-container {
 			max-width: 800px;
 			margin: 0 auto;
 			padding: 20px;
 			background-color: #0f0f1a;
-			box-shadow: 0 0 20px #00ffff; /* brilho azul */
+			box-shadow: 0 0 20px #00ffff; /* cyan glow */
 			border-radius: 10px;
 		}
 
@@ -504,7 +509,12 @@
 		}
 	</style>
 
-  <!-- Protection Scripts -->
+  <!-- Protection Scripts
+       NOTE: this used to be two overlapping script blocks — the first one was never closed
+       before the second script tag opened, so the browser treated everything up to the FIRST
+       real closing tag as one text blob. That text contained a bare opening script tag partway
+       through, which is invalid JavaScript and threw a syntax error, so none of this code ever
+       actually ran. Kept only the corrected version below. -->
   <script>
     // Block F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I, etc.
     document.onkeydown = function(e) {
@@ -513,7 +523,10 @@
         (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) ||
         (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
         (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0))
-      ) return false;
+      ) {
+        e.preventDefault();
+        return false;
+      }
     };
 
     // Block context menu
@@ -521,31 +534,7 @@
 
     // Block selection
     document.onselectstart = () => false;
-
-	<!-- Protection Scripts - FIXED -->
-	<script>
-	  // Block F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I, etc.
-	  document.onkeydown = function(e) {
-		if (
-		  e.keyCode == 123 || // F12
-		  (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) ||
-		  (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
-		  (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0))
-		) {
-		  e.preventDefault();
-		  return false;
-		}
-	  };
-
-	  // Block context menu
-	  document.addEventListener('contextmenu', e => e.preventDefault());
-
-	  // Block selection
-	  document.onselectstart = () => false;
-
-	  // CORRECTION: Removed window size detection that caused desktop blocking
-	  // This part was blocking normal desktop viewing
-	</script>
+  </script>
 
   <!-- Transformer Logic -->
   <script>
