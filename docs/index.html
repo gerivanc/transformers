@@ -6,38 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="strict-origin">
     <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src 'self' https://fonts.gstatic.com; 
-                   img-src 'self' data: https://*.githubusercontent.com https://img.shields.io https://komarev.com https://github-readme-activity-graph.vercel.app https://nirzak-streak-stats.vercel.app https://github-readme-stats.vercel.app https://github-profile-summary-cards.vercel.app https://vercel.app https://vercel.live;
-                   frame-src 'self' https://transformers.gerivan.me/ https://*.githubusercontent.com;">
-	
+    <!-- NOTE: consolidated the two separate <meta> CSPs that used to be here (with an unrelated
+         img-src allow-list copied from a GitHub-profile-README template, and a style-src that
+         didn't include fonts.googleapis.com even though this page loads a Google Fonts
+         stylesheet below) into one policy that matches what this page actually uses: its own
+         inline script/style, the Google Fonts stylesheet, and the two same-origin iframes. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline';
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' data:;
+                   connect-src 'none';
+                   frame-src https://transformers.gerivan.me;
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'none';">
+
 	<!-- Favicon -->
 	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/web-app-manifest-784x910.png" sizes="784x910">
 	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/favicon.ico">
 	<link rel="shortcut icon" href="https://transformers.gerivan.me/favicon.ico">
 	<link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
-	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
 
-	<!-- Manifest -->
-	<link rel="manifest" href="/site.webmanifest">
-    
-    <!-- Security Headers - MODIFIED: Updated CSP to allow iframes from transformers domain -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https://transformers.gerivan.me;">
+	<!-- NOTE: removed the duplicate <link rel="manifest"> (previously pointed at both
+	     /site.webmanifest and manifest.json — only one manifest link should exist per page). -->
+	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">
+
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://transformers.gerivan.me">
+    <!-- NOTE: X-Frame-Options "ALLOW-FROM ..." is deprecated/non-standard and ignored by every
+         current browser (only DENY/SAMEORIGIN are honored, and only via a real HTTP header, not
+         <meta>). Removed rather than left in as dead, misleading code. Real frame-embedding
+         control for this domain needs a "frame-ancestors"/X-Frame-Options HTTP response header
+         set server-side (e.g. vercel.json / _headers), which <meta> cannot provide. -->
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    
+
     <!-- Meta tags for PWA -->
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">	
+    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">
     <title>TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    
+
     <style>
         /* CSS Variables for consistent theming - UPDATED COLORS */
         :root {
@@ -791,7 +801,10 @@
         <div class="projection-beam beam-right"></div>
         <div class="container">
             <h1 class="projection-title">TRANSFORMERS INTERACTIVE NEURAL NETWORK VISUALIZER</h1>
-            <p class="subtitle" "justified-text">The "Transformers" project combines advanced visualizations of MLP and Transformer networks, revealing real-time neural flows and the power of parallel attention driving modern AI</p>
+            <!-- NOTE: was class="subtitle" "justified-text" — two separate quoted strings with
+                 no attribute name before the second one, which is invalid HTML. The browser
+                 ignored the stray token, so "justified-text" was never actually applied here. -->
+            <p class="subtitle justified-text">The "Transformers" project combines advanced visualizations of MLP and Transformer networks, revealing real-time neural flows and the power of parallel attention driving modern AI</p>
         </div>
     </header>
 
@@ -832,7 +845,8 @@
         <!-- CYBER NEURAL NETWORK Section -->
         <section class="cyber-neural-section">
             <h2 class="cyber-neural-title">CYBER NEURAL NETWORK - DUAL MODE</h2>
-            <p class="cyber-neural-subtitle" "justified-text">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
+            <!-- NOTE: same malformed class attribute as above — merged into one class list. -->
+            <p class="cyber-neural-subtitle justified-text">Advanced interactive neural network visualization with real-time node manipulation and dynamic connection patterns</p>
             
             <!-- NEW: Iframe preview of the neural network visualization with fallback -->
             <div class="iframe-container">
