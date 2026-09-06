@@ -6,37 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="strict-origin">
     <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline'; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src 'self' https://fonts.gstatic.com; 
-                   img-src 'self' data: https://*.githubusercontent.com https://img.shields.io https://komarev.com https://github-readme-activity-graph.vercel.app https://nirzak-streak-stats.vercel.app https://github-readme-stats.vercel.app https://github-profile-summary-cards.vercel.app https://vercel.app https://vercel.live;
-                   frame-src 'self' https://transformers.gerivan.me https://*.githubusercontent.com;">	
-	
+    <!-- NOTE: consolidated the two separate, partly conflicting <meta> CSPs that used to be here
+         into a single policy tailored to what this page actually loads (its own inline script/
+         style plus the Google Fonts stylesheet). Multiple CSP metas are each enforced
+         independently and combine as an AND, which made debugging what was actually allowed
+         confusing; a single source of truth is safer. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline';
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' data:;
+                   connect-src 'none';
+                   frame-src 'none';
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'none';">
+
 	<!-- Favicon -->
 	<link rel="icon" type="image/png" href="https://transformers.gerivan.me/web-app-manifest-784x910.png" sizes="784x910">
 	<link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/favicon.ico">
 	<link rel="shortcut icon" href="https://transformers.gerivan.me/favicon.ico">
 	<link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
-	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">	
 
-	<!-- Manifest -->
-	<link rel="manifest" href="/site.webmanifest">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https://transformers.gerivan.me;">
+	<!-- NOTE: removed the duplicate <link rel="manifest"> (previously pointed at both
+	     /site.webmanifest and manifest.json — only one manifest link should exist per page). -->
+	<link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">
+
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://transformers.gerivan.me">
+    <!-- NOTE: X-Frame-Options "ALLOW-FROM ..." is deprecated/non-standard and ignored by every
+         current browser (only DENY/SAMEORIGIN are honored, and only via a real HTTP header, not
+         <meta>). It was removed rather than left in as dead, misleading code. Since index.html
+         embeds this page in an <iframe>, real frame protection (a "frame-ancestors" CSP directive
+         or X-Frame-Options: SAMEORIGIN) needs to be set as an actual HTTP response header
+         server-side (e.g. vercel.json / _headers), which <meta> cannot do. -->
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 
     <!-- Meta tags for PWA -->
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">		
+    <meta name="description" content="Gerivan Costa - Developer passionate about security, science, and creativity">
     <title>CYBER NEURAL NETWORK - DUAL MODE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">    	
 	
     <style>
         /* Reset and base styles */
@@ -1034,7 +1045,14 @@
         // Create network instance
         const network = new Network();
         network.generateNodes();
-        
+
+        // NOTE: these three were previously used (in the mousemove/mousedown/mouseup handlers
+        // below) without ever being declared, which created implicit globals — sloppy and fragile
+        // (would throw a ReferenceError in strict mode). Declared explicitly here instead.
+        let mouseX = 0;
+        let mouseY = 0;
+        let isMouseDown = false;
+
         // UI Controls
         const nodeIntensitySlider = document.getElementById('nodeIntensity');
         const nodeIntensityValue = document.getElementById('nodeIntensityValue');
@@ -1070,11 +1088,6 @@
             network.generateNodes();
         });
         
-        // Reset visualization
-        resetButton.addEventListener('click', function() {
-            network.generateNodes();
-        });
-        
         // Switch to cyber mode
         cyberModeBtn.addEventListener('click', function() {
             network.setMode('cyber');
@@ -1099,53 +1112,55 @@
             cardPanel.classList.toggle('hidden');
         });
         
-        // Mouse interaction for desktop
-        canvas.addEventListener('mousemove', function(e) {
-            if (!network.isMobile) {
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                network.handleInteraction(x, y);
-            }
-        });
+        // NOTE: updates the on-screen slider labels + node-count badge to match the network's
+        // current values. Previously called from the reset handler below without ever being
+        // defined, which threw a ReferenceError in the console on every reset click.
+        function updateControlValues() {
+            nodeIntensityValue.textContent = network.nodeIntensity;
+            pulseSpeedValue.textContent = network.pulseSpeed;
+            nodeCountValue.textContent = network.nodeCount;
+            document.getElementById('nodeCount').textContent = network.nodeCount;
+        }
 
         // Reset button functionality
-        document.getElementById('resetButton').addEventListener('click', function() {
+        // NOTE: this used to be split across two separate click listeners on the same button
+        // (one just called network.generateNodes(), the other reset the sliders too) — merged
+        // into the single, more complete handler below.
+        resetButton.addEventListener('click', function() {
             // Reset all sliders to default values
-            document.getElementById('nodeIntensity').value = 70;
-            document.getElementById('pulseSpeed').value = 10;
-            document.getElementById('nodeCountSlider').value = 150;
-            
+            nodeIntensitySlider.value = 70;
+            pulseSpeedSlider.value = 10;
+            nodeCountSlider.value = 150;
+
             // Update network with default values
             network.nodeIntensity = 70;
             network.pulseSpeed = 10;
             network.nodeCount = 150;
-            
+
             // Regenerate nodes
             network.generateNodes();
-            
+
             // Update display values
             updateControlValues();
         });
-        
-        // Track mouse position
+
+        // NOTE: mouse tracking used to be split across two separate 'mousemove' listeners on the
+        // same canvas (one computing its own local x/y, the other assigning to mouseX/mouseY) —
+        // merged into a single listener so network.handleInteraction() only runs once per event.
         canvas.addEventListener('mousemove', function(e) {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            if (isMouseDown) {
-                network.handleInteraction(mouseX, mouseY, true);
-            } else {
-                network.handleInteraction(mouseX, mouseY, false);
-            }
+            if (network.isMobile) return;
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+            network.handleInteraction(mouseX, mouseY, isMouseDown);
         });
-        
+
         // Track mouse down
-        canvas.addEventListener('mousedown', function(e) {
+        canvas.addEventListener('mousedown', function() {
             isMouseDown = true;
             network.handleInteraction(mouseX, mouseY, true);
         });
-        
+
         // Track mouse up
         canvas.addEventListener('mouseup', function() {
             isMouseDown = false;
