@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="noarchive">
+    <!-- NOTE: style-src/font-src now include cdn.jsdelivr.net — the Fira Code stylesheet below is
+         loaded from jsdelivr, so without it here that stylesheet (and the font files it in turn
+         references) was silently blocked by CSP and the page fell back to its generic monospace
+         stack instead of Fira Code. -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'self' 'unsafe-inline';
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        font-src 'self' https://fonts.gstatic.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
+        font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;
         img-src 'self' data:;
         connect-src 'none';
         frame-src 'none';
@@ -18,11 +22,15 @@
         form-action 'none';
         upgrade-insecure-requests;
     ">
+    <!-- NOTE: X-Frame-Options has no effect when set via <meta> — browsers only honor it as a
+         real HTTP response header. This page isn't embedded via <iframe> anywhere on the site,
+         so it's low-stakes here, but if real frame protection is ever needed it must be
+         configured server-side (e.g. vercel.json / _headers), not through a meta tag. -->
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="no-referrer">
     <meta name="format-detection" content="telephone=no">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://transformers.gerivan.me/favicon-256x256.png" sizes="256x256">
     <link rel="icon" type="image/x-icon" href="https://transformers.gerivan.me/web-app-manifest-784x789.png">
@@ -30,14 +38,16 @@
     <link rel="apple-touch-icon" sizes="256x256" href="https://transformers.gerivan.me/apple-touch-icon-256x256.png">
     <link rel="manifest" href="https://transformers.gerivan.me/site.webmanifest">
 
-    <!-- Meta tags para PWA -->
+    <!-- Meta tags for PWA -->
     <meta name="theme-color" content="#0a0a1a">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="description" content="Especificações Técnicas da Rede Neural Transformer - Projeto Interativo">
-    
+    <!-- NOTE: was in Portuguese while the whole page (lang, title, body copy) is English — fixed
+         for consistency, same as the "lang" attribute above. -->
+    <meta name="description" content="Technical Specifications of the Transformer Neural Network - Interactive Project">
+
     <title>Technical Specifications - Transformers Neural Network</title>
-    
-    <!-- Fontes -->
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css" rel="stylesheet">
     
@@ -568,35 +578,40 @@
             </div>
         </div>
 
-        <!-- Performance Indicators -->
+        <!-- Performance Indicators
+             NOTE: each ".indicator-fill" used to start with its inline width already equal to its
+             data-value (e.g. width:85% + data-value="85"), so the IntersectionObserver below that
+             was supposed to animate the bar filling up on scroll just re-applied the same value —
+             no visible transition ever played. Bars now start at 0% and fill to data-value once
+             they scroll into view, which is what the observer + CSS transition were built for. -->
         <div class="performance-indicators">
             <h4>📊 REAL-TIME PERFORMANCE INDICATORS</h4>
             <div class="indicators-grid">
                 <div class="indicator">
                     <div class="indicator-label">GPU Utilization</div>
                     <div class="indicator-bar">
-                        <div class="indicator-fill" style="width: 85%" data-value="85"></div>
+                        <div class="indicator-fill" style="width: 0%" data-value="85"></div>
                     </div>
                     <div class="indicator-value">85%</div>
                 </div>
                 <div class="indicator">
                     <div class="indicator-label">Memory Efficiency</div>
                     <div class="indicator-bar">
-                        <div class="indicator-fill" style="width: 92%" data-value="92"></div>
+                        <div class="indicator-fill" style="width: 0%" data-value="92"></div>
                     </div>
                     <div class="indicator-value">92%</div>
                 </div>
                 <div class="indicator">
                     <div class="indicator-label">Training Speed</div>
                     <div class="indicator-bar">
-                        <div class="indicator-fill" style="width: 78%" data-value="78"></div>
+                        <div class="indicator-fill" style="width: 0%" data-value="78"></div>
                     </div>
                     <div class="indicator-value">78%</div>
                 </div>
                 <div class="indicator">
                     <div class="indicator-label">Mobile Optimization</div>
                     <div class="indicator-bar">
-                        <div class="indicator-fill" style="width: 95%" data-value="95"></div>
+                        <div class="indicator-fill" style="width: 0%" data-value="95"></div>
                     </div>
                     <div class="indicator-value">95%</div>
                 </div>
@@ -606,7 +621,7 @@
 
     <footer>
         <div class="container">
-            <p>Copyright © 2025 Gerivan Costa dos Santos</p>
+            <p>Copyright © 2025-2026 Gerivan Costa dos Santos</p>
             <p>Transformers Neural Network — Interactive Visualizer © 2025</p>
             <p>Secure Connection Established • Neural Network Active</p>
         </div>
