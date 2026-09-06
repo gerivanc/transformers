@@ -139,7 +139,7 @@ This educational project welcomes suggestions and feedback. Both systems are des
 
 This project is licensed under the terms included in the [LICENSE](https://github.com/gerivanc/transformers/blob/main/LICENSE) file.
 
-## 📞 Support
+## 📧 Support
 
 For questions regarding either visualization system:
 - Visit the main project page: [Transformers Interactive Visualizer](https://transformers.gerivan.me)
